@@ -21,9 +21,10 @@
 		var $overfind;
 		var backtime;
 		var movebacktime="";
-		var gunspped=8;//子彈速度
-		var sumback=500;//隕石生成速度 1000=1s
+		var gunspped=8; //子彈速度
+		var sumback=200; //隕石生成速度 1000=1s
 		var sumbackp=10; //機率sumbackp分之1
+		var score=10; //擊破隕石得分數
 		//移動速度
 		var upspeed=4;
 		var downspeed=4;
@@ -35,11 +36,16 @@
 		var back3speed=1.0;
 		var back4speed=0.5;
 		var back5speed=2;
-		$player=$("#player");
-		$stage=$(".stage");
+		$player=$("#player");	//玩家
+		$stage=$(".stage");		//背景
+		$mygun=$(".mygun");		//子彈
+		$icon=$(".icon");		//記分板
 		//起始高度
 		$player.css({
 			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
+		})
+		$icon.css({
+			left:(parseFloat($stage.css("width"))-parseFloat($icon.css("width")))/2
 		})
 		//移動隕石
 		function moveback(){
@@ -131,7 +137,7 @@
 				timeup=setInterval(function(){
 					if (start=="true"){
 						tmp=(parseFloat($player.css("top")))-upspeed
-						if (tmp>parseFloat($stage.css("top"))){
+						if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
 							$player.css("top",tmp)
 						}
 					}
@@ -149,7 +155,7 @@
 				timedown=setInterval(function(){
 					if (start=="true"){
 						tmp=(parseFloat($player.css("top")))+downspeed
-						if (tmp+parseFloat($player.css("height"))<parseFloat($stage.css("height"))){
+						if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
 							$player.css("top",tmp)
 						}
 					}
@@ -219,7 +225,7 @@
 			gunflytime=setInterval(function(){
 				$findgun=$stage.find(".mygun").each(function(){
 					$(this).css("left",parseFloat($(this).css("left"))+gunspped)
-					//刪除子彈
+					//刪除子彈(超出螢幕)
 					if (parseFloat($(this).css("left"))>parseFloat($stage.css("width"))){
 						$(this).remove();
 					}
@@ -237,8 +243,30 @@
 		}
 		//判斷
 		function yn(){
+			//判斷子彈位置
 			$stage.find(".back").each(function(){
-				console.log($(this).innerHTML);
+				var tt=$(this)
+				var find=$stage.find(".mygun").each(function(){
+					if (parseFloat($(this).css("top"))+parseFloat($(this).css("height"))/2>parseFloat(tt.css("top"))//上
+					&&parseFloat($(this).css("top"))+parseFloat($(this).css("height"))/2<parseFloat(tt.css("top"))+parseFloat(tt.css("height"))//下
+					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2>parseFloat(tt.css("left"))//左
+					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2<parseFloat(tt.css("left"))+parseFloat(tt.css("width")))//右
+					{
+						//擊中隕石(消除子彈)
+						if (tt.text()==2){
+							$(this).remove();
+							tt.html(1);
+						}
+						else{
+							//加分
+							$(".icon").html(parseInt($(".icon").text())+score+"得分");
+							//消除隕石子彈
+							$(this).remove();
+							tt.remove();
+						}
+					}
+				})
+				
 			})
 		}
 		newgame=setInterval(yn,1000/60)
@@ -329,7 +357,21 @@
 		background: url(image/back5.png);
 	}
 	.back{
-		transform: rotate(50deg);
+		font-size:0px;
+	}
+	.text{
+		left: 300px;
+		top: 200px;
+	}
+	.icon{
+		position: absolute;
+		width: 300px;
+		height: 40px;
+		background: url("image/icon.png");
+		font-size: 60px;
+		text-align: center;
+		color: gold;
+		left: 390px;
 	}
 </style>
 </head>
@@ -343,6 +385,7 @@
 		<div class="move left"></div>
 		<div class="move right"></div>
 		<div class="move midden"></div>
+		<div class="icon">0得分</div>
 	</div>
 </body>
 	
