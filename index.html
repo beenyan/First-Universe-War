@@ -10,32 +10,126 @@
 	$(function(){
 		var tmp;
 		var start="true";
-		var time;
+		var timeup;
+		var timedown;
+		var timeright;
+		var timeleft;
+		var gunflytime;
+		var $find;
+		var $findgun;
+		var $overfind;
+		var gunspped=5;//子彈速度
 		$player=$("#player");
 		$stage=$(".stage");
 		//起始高度
 		$player.css({
 			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
 		})
+		//隨機隕石滑過
+		
 		//鍵盤滑鼠事件
+			//上下左右移動
 			//向上
 			$(".up").mousedown(function(){
-				time=setInterval(function(){
+				clearInterval(timeup)
+				timeup=setInterval(function(){
 					if (start=="true"){
 						tmp=(parseFloat($player.css("top")))-2
 						if (tmp>parseFloat($stage.css("top"))){
 							$player.css("top",tmp)
 						}
 					}
-					console.log
 				},1000/60)
 			})
 			$(".up").mouseup(function(){
-				clearInterval(time)
+				clearInterval(timeup)
 			})
 			$(".up").mouseout(function(){
-				clearInterval(time)
+				clearInterval(timeup)
 			})
+			//向下
+			$(".down").mousedown(function(){
+				clearInterval(timedown)
+				timedown=setInterval(function(){
+					if (start=="true"){
+						tmp=(parseFloat($player.css("top")))+2
+						if (tmp+parseFloat($player.css("height"))<parseFloat($stage.css("height"))){
+							$player.css("top",tmp)
+						}
+					}
+				},1000/60)
+			})
+			$(".down").mouseup(function(){
+				clearInterval(timedown)
+			})
+			$(".down").mouseout(function(){
+				clearInterval(timedown)
+			})
+			//向右
+			$(".right").mousedown(function(){
+				clearInterval(timeright)
+				timeright=setInterval(function(){
+					if (start=="true"){
+						tmp=(parseFloat($player.css("left")))+4
+						if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
+							$player.css("left",tmp)
+						}
+					}
+				},1000/60)
+			})
+			$(".right").mouseup(function(){
+				clearInterval(timeright)
+			})
+			$(".right").mouseout(function(){
+				clearInterval(timeright)
+			})
+			//向左
+			$(".left").mousedown(function(){
+				clearInterval(timeleft)
+				timeleft=setInterval(function(){
+					if (start=="true"){
+						tmp=(parseFloat($player.css("left")))-4
+						if (tmp>0){
+							$player.css("left",tmp)
+						}
+					}
+				},1000/60)
+			})
+			$(".left").mouseup(function(){
+				clearInterval(timeleft)
+			})
+			$(".left").mouseout(function(){
+				clearInterval(timeleft)
+			})
+			//禁止右鍵
+			$("body").contextmenu(function(x){
+				x.preventDefault();
+			})
+			//空白艦發射子彈
+			$("body").keyup(function(x,y){
+				if (start=="true"){
+					if (x.key==" "){
+						$stage.append("<div class='mygun'></div>")
+						$find=$stage.find(".mygun:last");
+						$find.css({
+							left:parseFloat($player.css("left"))+35,
+							top:parseFloat($player.css("top"))+10,
+						})
+						
+					}
+				}
+			})
+			//子彈前進
+			gunflytime=setInterval(function(){
+				$findgun=$stage.find(".mygun").each(function(){
+					$(this).css("left",parseFloat($(this).css("left"))+gunspped)
+					if (parseFloat($(this).css("left"))>parseFloat($stage.css("width"))){
+						console.log(parseFloat($(this).css("left")))
+						$(this).remove();
+					}
+				})
+				
+			},1000/60)
 		//開始遊戲
 		function start(){
 			
@@ -50,17 +144,20 @@
 		position:absolute;
 		top:0; left:0; right:0; bottom:0;
 		margin:auto;
+		overflow: hidden;
 	}
 	.player{
 		background:url("image/fly.png");
 		width: 50px;
 		height: 30px;
 		position: absolute;
+		z-index: 1;
 	}
 	.move{
 		width: 40px;
 		height: 40px;
 		position: absolute;
+		z-index: 2;
 	}
 	.up{
 		background:url("image/up.png");
@@ -86,6 +183,12 @@
 		background:url("image/midden.png");
 		left: 40px;
 		top: 520px;
+	}
+	.mygun{
+		background:url("image/mygun.png");
+		position: absolute;
+		width: 20px;
+		height: 10px;
 	}
 </style>
 </head>
