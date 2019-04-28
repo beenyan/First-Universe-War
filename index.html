@@ -8,36 +8,98 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script>
 	$(function(){
-		var $windowheight=$(window).height();
-		var $stage=$(".stage");
-		console.log($stage.css("top"))
-		$stage.css({
-			top:$windowheight/2
+		var tmp;
+		var start="true";
+		var time;
+		$player=$("#player");
+		$stage=$(".stage");
+		//起始高度
+		$player.css({
+			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
 		})
+		//鍵盤滑鼠事件
+			//向上
+			$(".up").mousedown(function(){
+				time=setInterval(function(){
+					if (start=="true"){
+						tmp=(parseFloat($player.css("top")))-2
+						if (tmp>parseFloat($stage.css("top"))){
+							$player.css("top",tmp)
+						}
+					}
+					console.log
+				},1000/60)
+			})
+			$(".up").mouseup(function(){
+				clearInterval(time)
+			})
+			$(".up").mouseout(function(){
+				clearInterval(time)
+			})
+		//開始遊戲
+		function start(){
+			
+		}
 	})
 </script>
 <style type="text/css">
 	.stage{
-		position: relative;
-		display: inline-block;
-		overflow: hidden;
-		width: 960px;
-		height: 600px;
-		background-color: black;
+		background:url("image/stage.jpg");
+		width:960px;	
+		height:600px;
+		position:absolute;
+		top:0; left:0; right:0; bottom:0;
+		margin:auto;
 	}
-	body{
-		text-align: center;
+	.player{
+		background:url("image/fly.png");
+		width: 50px;
+		height: 30px;
+		position: absolute;
+	}
+	.move{
+		width: 40px;
+		height: 40px;
+		position: absolute;
+	}
+	.up{
+		background:url("image/up.png");
+		left: 40px;
+		top: 480px;
+	}
+	.down{
+		background:url("image/down.png");
+		left: 40px;
+		top: 560px;
+	}
+	.left{
+		background:url("image/left.png");
+		left: 0px;
+		top: 520px;
+	}
+	.right{
+		background:url("image/right.png");
+		left: 80px;
+		top: 520px;
+	}
+	.midden{
+		background:url("image/midden.png");
+		left: 40px;
+		top: 520px;
 	}
 </style>
-	
 </head>
 	
 <body>
-	
 	<div class="stage">
-		
+		<div class="player" id="player"></div>
+		<!--移動(上，下，左，右，中)-->
+		<div class="move up"></div>
+		<div class="move down"></div>
+		<div class="move left"></div>
+		<div class="move right"></div>
+		<div class="move midden"></div>
 	</div>
-	
 </body>
 	
 </html>
