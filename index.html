@@ -8,6 +8,7 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script>
 	$(function(){
+		var newgame;
 		var tmp;
 		var start="true";
 		var timeup;
@@ -18,15 +19,110 @@
 		var $find;
 		var $findgun;
 		var $overfind;
-		var gunspped=5;//子彈速度
+		var backtime;
+		var movebacktime="";
+		var gunspped=8;//子彈速度
+		var sumback=500;//隕石生成速度 1000=1s
+		var sumbackp=10; //機率sumbackp分之1
+		//移動速度
+		var upspeed=4;
+		var downspeed=4;
+		var leftspeed=6;
+		var rightspeed=6;
+		//隕石速度
+		var back1speed=1.5;
+		var back2speed=2.5;
+		var back3speed=1.0;
+		var back4speed=0.5;
+		var back5speed=2;
 		$player=$("#player");
 		$stage=$(".stage");
 		//起始高度
 		$player.css({
 			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
 		})
-		//隨機隕石滑過
-		
+		//移動隕石
+		function moveback(){
+			$stage.find(".back1").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back1speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back2").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back2speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back3").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back3speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back4").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back4speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back5").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back5speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+		}
+		//隨機生成(移動)隕石
+		backtime=setInterval(function(){
+			if (rand(0,sumbackp)==0){
+				var list=["<div class='back1 back'>2</div>","<div class='back2  back'>2</div>","<div class='back3  back'>2</div>","<div class='back4  back'>2</div>","<div class='back5  back'>2</div>"];
+				var temp=rand(0,4)
+				$stage.append(list[temp])
+				if (temp==0){
+					$find=$stage.find(".back1:last")
+					$find.css({
+						left:parseInt($stage.css("width")),
+						top:rand(-300,600),
+					})
+				}
+				else if (temp==1){
+					$find=$stage.find(".back2:last")
+					$find.css({
+						left:parseInt($stage.css("width")),
+						top:rand(-300,600),
+					})
+				}
+				else if (temp==2){
+					$find=$stage.find(".back3:last")
+					$find.css({
+						left:parseInt($stage.css("width")),
+						top:rand(-300,600),
+					})
+				}
+				else if (temp==3){
+					$find=$stage.find(".back4:last")
+					$find.css({
+						left:parseInt($stage.css("width")),
+						top:rand(-300,600),
+					})
+				}
+				else if (temp==4){
+					$find=$stage.find(".back5:last")
+					$find.css({
+						left:parseInt($stage.css("width")),
+						top:rand(-300,600),
+					})
+				}
+				if (movebacktime=="")movebacktime=setInterval(moveback,1000/60)
+			}
+		},sumback)
 		//鍵盤滑鼠事件
 			//上下左右移動
 			//向上
@@ -34,7 +130,7 @@
 				clearInterval(timeup)
 				timeup=setInterval(function(){
 					if (start=="true"){
-						tmp=(parseFloat($player.css("top")))-2
+						tmp=(parseFloat($player.css("top")))-upspeed
 						if (tmp>parseFloat($stage.css("top"))){
 							$player.css("top",tmp)
 						}
@@ -52,7 +148,7 @@
 				clearInterval(timedown)
 				timedown=setInterval(function(){
 					if (start=="true"){
-						tmp=(parseFloat($player.css("top")))+2
+						tmp=(parseFloat($player.css("top")))+downspeed
 						if (tmp+parseFloat($player.css("height"))<parseFloat($stage.css("height"))){
 							$player.css("top",tmp)
 						}
@@ -70,7 +166,7 @@
 				clearInterval(timeright)
 				timeright=setInterval(function(){
 					if (start=="true"){
-						tmp=(parseFloat($player.css("left")))+4
+						tmp=(parseFloat($player.css("left")))+rightspeed
 						if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
 							$player.css("left",tmp)
 						}
@@ -88,7 +184,7 @@
 				clearInterval(timeleft)
 				timeleft=setInterval(function(){
 					if (start=="true"){
-						tmp=(parseFloat($player.css("left")))-4
+						tmp=(parseFloat($player.css("left")))-leftspeed
 						if (tmp>0){
 							$player.css("left",tmp)
 						}
@@ -123,8 +219,8 @@
 			gunflytime=setInterval(function(){
 				$findgun=$stage.find(".mygun").each(function(){
 					$(this).css("left",parseFloat($(this).css("left"))+gunspped)
+					//刪除子彈
 					if (parseFloat($(this).css("left"))>parseFloat($stage.css("width"))){
-						console.log(parseFloat($(this).css("left")))
 						$(this).remove();
 					}
 				})
@@ -134,6 +230,18 @@
 		function start(){
 			
 		}
+		//隨機整數
+		function rand(nn,mm){
+			var num=parseInt(Math.random()*(mm-nn+1))+nn
+			return num;
+		}
+		//判斷
+		function yn(){
+			$stage.find(".back").each(function(){
+				console.log($(this).innerHTML);
+			})
+		}
+		newgame=setInterval(yn,1000/60)
 	})
 </script>
 <style type="text/css">
@@ -189,6 +297,39 @@
 		position: absolute;
 		width: 20px;
 		height: 10px;
+	}
+	.back1{
+		position: absolute;
+		width: 230px;
+		height: 220px;
+		background: url(image/back1.png);
+	}
+	.back2{
+		position: absolute;
+		width: 320px;
+		height: 318px;
+		background: url(image/back2.png);
+	}
+	.back3{
+		position: absolute;
+		width: 68px;
+		height: 66px;
+		background: url(image/back3.png);
+	}
+	.back4{
+		position: absolute;
+		width: 48px;
+		height: 44px;
+		background: url(image/back4.png);
+	}
+	.back5{
+		position: absolute;
+		width: 180px;
+		height: 180px;
+		background: url(image/back5.png);
+	}
+	.back{
+		transform: rotate(50deg);
 	}
 </style>
 </head>
