@@ -86,7 +86,7 @@
 			moveenemytime=setInterval(moveenemy,1000/FPS)
 			movegun=setInterval(gunmove,1000/FPS)
 		}
-		text()
+		starttime()
 		//關閉計時器
 		function offtime(){
 			stop="true";
@@ -247,12 +247,21 @@
 		//強化敵人
 		function addpwoer(){
 			addtime=addtime+1;
-			if (addtime>=60){
-				addtime=addtime-60;
-				sumbackp=sumbackp-2		//生成隕石
-				sumenemyp=sumenemyp-2;	//生成敵人
-				shootgunp=shootgunp-2;	//敵人發射子彈機率
-				sump=sump-2;			//燃料生成機率
+			if (addtime>=300){
+				addtime=addtime-300;
+				if (sumbackp>100){
+					sumbackp=sumbackp-2		//生成隕石
+				}
+				if (sumenemyp>100){
+					sumenemyp=sumenemyp-2;	//生成敵人
+				}
+				if (shootgunp>100){
+					shootgunp=shootgunp-2;	//敵人發射子彈機率
+				}
+				if (sump>100){
+					sump=sump-2;			//燃料生成機率
+				}
+				console.log("隕石"+sumbackp,"敵人"+sumenemyp,"子彈"+shootgunp,"燃料"+sump)
 			}
 		}
 		//鍵盤滑鼠事件
@@ -337,29 +346,30 @@
 			$("body").keydown(function(x,y){
 				if (start=="true"&&stop=="false"){
 					if (x.key=="a"||x.key=="A"){
-						tmp=(parseFloat($player.css("left")))-leftspeed
+						tmp=(parseFloat($player.css("left")))-leftspeed*2
 						if (tmp>0){
 							$player.css("left",tmp)
 						}
 					}
 					else if(x.key=="s"||x.key=="S"){
-						tmp=(parseFloat($player.css("top")))+downspeed
+						tmp=(parseFloat($player.css("top")))+downspeed*2
 						if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
 							$player.css("top",tmp)
 						}
 					}
 					else if(x.key=="d"||x.key=="D"){
-						tmp=(parseFloat($player.css("left")))+rightspeed
+						tmp=(parseFloat($player.css("left")))+rightspeed*2
 						if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
 							$player.css("left",tmp)
 						}
 					}
 					else if(x.key=="w"||x.key=="W"){
-						tmp=(parseFloat($player.css("top")))-upspeed
+						tmp=(parseFloat($player.css("top")))-upspeed*2
 						if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
 							$player.css("top",tmp)
 						}
 					}
+					
 				}
 			})
 			//空白建發射子彈
@@ -382,11 +392,17 @@
 						if (stop=="true"){
 							starttime();
 							$(".stop").remove();
+							$(".indiv").remove();
 						}
 						else if (stop=="false"){
 							offtime();
 							start="true";
 							$stage.append("<div class='stop'>遊戲暫停，按P開始遊戲</div>");
+							$stage.append("<div class='indiv' id='d1'>隕石生成率："+"1/"+parseInt(sumbackp/FPS)+"</div>");
+							$stage.append("<div class='indiv' id='d2'>敵人生成率："+"1/"+parseInt(sumenemyp/FPS)+"</div>");
+							$stage.append("<div class='indiv' id='d3'>敵人發射子彈機率："+"1/"+parseInt(shootgunp/FPS)+"</div>");
+							$stage.append("<div class='indiv' id='d4'>燃料生成機率："+"1/"+parseInt(sump/FPS)+"</div>");
+							
 						}
 					}
 				}
@@ -849,6 +865,14 @@
 		width: 20px;
 		height: 5px;
 		position: absolute;
+	}
+	.indiv{
+		position: relative;
+		font-size: 40px;
+		color:#F8FF00;
+		width: 960px;
+		height: 40px;
+		z-index: 20;
 	}
 </style>
 </head>
