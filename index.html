@@ -23,10 +23,9 @@
 		var sumbackp=300; 	//生成隕石機率sumbackp分之1
 		var score=10; 		//擊破隕石得分數
 		var FPS=60;
-		var gasmiss=1000;	//燃料消耗速度
 		var gashave=15;		//初始燃料
 		var backattack=15;	//撞到隕石損失的燃料
-		var sump=5;			//燃料生成機率sump/1s
+		var sump=500;		//燃料生成機率sump/1s
 		var gasspeed=1;		//汽油下降速度
 		var stop="true";	//檢查遊戲是否暫停
 		var enemyspeed=2; 	//敵人戰艦移動速度
@@ -44,6 +43,7 @@
 		var moveenemytime;
 		var enemygun;
 		var movegun;
+		var addenemytime;
 		//移動速度
 		var upspeed=4;
 		var downspeed=4;
@@ -64,9 +64,9 @@
 		function starttime(){
 			stop="false";
 			start="true";
-			gastime=setInterval(gas,gasmiss)				//1.消耗燃料
+			gastime=setInterval(gas,1000)				//1.消耗燃料
 			st=setInterval(yn,1000/FPS)						//2.啟用判斷
-			sumgastime=setInterval(sumgas,1000)				//3.生成燃料
+			sumgastime=setInterval(sumgas,1000/FPS)				//3.生成燃料
 			gasdowntime=setInterval(gasdown,1000/FPS)		//4.燃料下降
 			backtime=setInterval(summonback,1000/FPS)		//5.生成隕石
 			movebacktime=setInterval(moveback,1000/FPS)		//6.隕石移動
@@ -75,6 +75,7 @@
 			moveenemytime=setInterval(moveenemy,1000/FPS)	//9.敵人移動
 			enemygun=setInterval(enemyshoot,1000/FPS)		//10.敵人射擊
 			movegun=setInterval(gunmove,1000/FPS)			//11.敵人子彈移動
+			addenemytime=setInterval(addpwoer,1000/FPS)		//12.強化敵人
 		}
 		function text(){
 			stop="false";
@@ -85,7 +86,7 @@
 			moveenemytime=setInterval(moveenemy,1000/FPS)
 			movegun=setInterval(gunmove,1000/FPS)
 		}
-		starttime()
+		text()
 		//關閉計時器
 		function offtime(){
 			stop="true";
@@ -101,6 +102,7 @@
 			clearInterval(moveenemytime);
 			clearInterval(enemygun);
 			clearInterval(movegun);	
+			clearInterval(addenemytime);
 		}
 		//起始設定
 		$player.css({
@@ -242,8 +244,19 @@
 					}
 			})
 		}
+		//強化敵人
+		function addpwoer(){
+			addtime=addtime+1;
+			if (addtime>=60){
+				addtime=addtime-60;
+				sumbackp=sumbackp-2		//生成隕石
+				sumenemyp=sumenemyp-2;	//生成敵人
+				shootgunp=shootgunp-2;	//敵人發射子彈機率
+				sump=sump-2;			//燃料生成機率
+			}
+		}
 		//鍵盤滑鼠事件
-			//上下左右移動
+			//上下左右移動(螢幕)
 			//向上
 			$(".up").mousedown(function(){
 				clearInterval(timeup)
@@ -320,6 +333,35 @@
 			$("body").contextmenu(function(x){
 				x.preventDefault();
 			})
+			//上下左右移動(鍵盤)
+			$("body").keydown(function(x,y){
+				if (start=="true"&&stop=="false"){
+					if (x.key=="a"||x.key=="A"){
+						tmp=(parseFloat($player.css("left")))-leftspeed
+						if (tmp>0){
+							$player.css("left",tmp)
+						}
+					}
+					else if(x.key=="s"||x.key=="S"){
+						tmp=(parseFloat($player.css("top")))+downspeed
+						if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
+							$player.css("top",tmp)
+						}
+					}
+					else if(x.key=="d"||x.key=="D"){
+						tmp=(parseFloat($player.css("left")))+rightspeed
+						if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
+							$player.css("left",tmp)
+						}
+					}
+					else if(x.key=="w"||x.key=="W"){
+						tmp=(parseFloat($player.css("top")))-upspeed
+						if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
+							$player.css("top",tmp)
+						}
+					}
+				}
+			})
 			//空白建發射子彈
 			$("body").keyup(function(x,y){
 				if (stop=="false"){
@@ -371,14 +413,17 @@
 				$(".back").remove();
 				$(".gameover").remove();
 				$(".allenemy").remove();
+				$(".enemygun").remove();
 				//變數重設
-				sumbackp=100; 	//生成隕石機率sumbackp分之1
+				shootgunp=500;
+				sumenemyp=500;
+				sumbackp=300; 	//生成隕石機率sumbackp分之1
 				score=10; 		//擊破隕石得分數
 				FPS=60;
 				gasmiss=1000;	//燃料消耗速度
 				gashave=15;		//初始燃料
 				backattack=15;	//撞到隕石損失的燃料
-				sump=5;			//燃料生成機率sump/1s
+				sump=500;		//燃料生成機率sump/1s
 				gasspeed=1;		//汽油下降速度
 				stop="false";	//檢查遊戲是否暫停
 				start="true";
