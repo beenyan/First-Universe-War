@@ -8,7 +8,7 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script>
 	$(function(){
-		var yn;
+		var st;
 		var tmp;
 		var start="false";
 		var timeup;
@@ -19,8 +19,7 @@
 		var $findgun;
 		var $overfind;
 		var gunspped=8; 	//子彈速度
-		var sumback=500;	//隕石生成速度 1000=1s
-		var sumbackp=10; 	//生成隕石機率sumbackp分之1
+		var sumbackp=300; 	//生成隕石機率sumbackp分之1
 		var score=10; 		//擊破隕石得分數
 		var FPS=60;
 		var gasmiss=1000;	//燃料消耗速度
@@ -29,6 +28,8 @@
 		var sump=5;			//燃料生成機率sump/1s
 		var gasspeed=1;		//汽油下降速度
 		var stop="true";	//檢查遊戲是否暫停
+		var enemyspeed=2; 	//敵人戰艦移動速度
+		var sumenemyp=500;	//生成敵人機率sumenemyp/(1000/FPS)s
 		//循環時間變數;
 		var gunflytime;
 		var backtime;
@@ -36,6 +37,9 @@
 		var gastime;
 		var sumgastime;
 		var gasdowntime;
+		var summonenemytime;
+		var moveenemytime;
+		var enemygun;
 		//移動速度
 		var upspeed=4;
 		var downspeed=4;
@@ -52,6 +56,42 @@
 		$mygun=$(".mygun");		//子彈
 		$icon=$(".icon");		//記分板
 		$gas=$(".gas");			//燃料
+		//開啟計時器
+		function starttime(){
+			stop="false";
+			start="true";
+			gastime=setInterval(gas,gasmiss)				//消耗燃料
+			st=setInterval(yn,1000/FPS)						//啟用判斷
+			sumgastime=setInterval(sumgas,1000)				//生成燃料
+			gasdowntime=setInterval(gasdown,1000/FPS)		//燃料下降
+			backtime=setInterval(summonback,1000/FPS)		//生成隕石
+			movebacktime=setInterval(moveback,1000/FPS)		//隕石移動
+			gunflytime=setInterval(gunflying,1000/FPS)		//子彈移動
+			summonenemytime=setInterval(sumenemy,1000/FPS)	//生成敵人
+			moveenemytime=setInterval(moveenemy,1000/FPS)	//敵人移動
+			enemygun=setInterval(enemyshoot,1000/FPS)		//敵人射擊
+		}
+		function text(){
+			stop="false";
+			start="true";
+			st=setInterval(yn,1000/FPS)
+			gunflytime=setInterval(gunflying,1000/FPS)
+		}
+		text()
+		//關閉計時器
+		function offtime(){
+			stop="true";
+			start="false";
+			clearInterval(gastime);
+			clearInterval(sumgastime);
+			clearInterval(gasdowntime);
+			clearInterval(backtime);
+			clearInterval(movebacktime);
+			clearInterval(gunflytime);
+			clearInterval(st);
+			clearInterval(summonenemytime);
+			clearInterval(moveenemytime);
+		}
 		//起始設定
 		$player.css({
 			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
@@ -103,7 +143,7 @@
 				}
 			})
 		}
-		//隨機生成(移動)隕石
+		//隨機生成隕石
 		function summonback(){
 			if (rand(0,sumbackp)==0){
 				var list=["<div class='back1 back'>2</div>","<div class='back2  back'>2</div>","<div class='back3  back'>2</div>","<div class='back4  back'>2</div>","<div class='back5  back'>2</div>"];
@@ -166,6 +206,12 @@
 				if (parseFloat($(this).css("top"))>600){
 					$(this).remove();	
 				}
+			})
+		}
+		//敵人發射子彈
+		function enemyshoot(){
+			$stage.find(".allenemy").each(function(){
+				
 			})
 		}
 		//鍵盤滑鼠事件
@@ -256,35 +302,22 @@
 							left:parseFloat($player.css("left"))+35,
 							top:parseFloat($player.css("top"))+10,
 						})
-						
 					}
-					
 				}
-				
 			})
 			//遊戲暫停(開啟)
 			$("body").keyup(function(x,y){
-				if (x.key=="p"||x.key=="P"){
-					if (stop=="true"){
-						stop="false";
-						start="true";
-						gastime=setInterval(gas,gasmiss)			//消耗燃料
-						sumgastime=setInterval(sumgas,1000)			//生成燃料
-						gasdowntime=setInterval(gasdown,1000/FPS)	//燃料下降
-						backtime=setInterval(summonback,sumback)	//生成隕石
-						movebacktime=setInterval(moveback,1000/FPS)	//隕石移動
-						gunflytime=setInterval(gunflying,1000/FPS)	//子彈移動
-						$(".stop").remove();
-					}
-					else if (stop=="false"){
-						clearInterval(gastime);
-						clearInterval(sumgastime);
-						clearInterval(gasdowntime);
-						clearInterval(backtime);
-						clearInterval(movebacktime);
-						clearInterval(gunflytime);
-						stop="true";
-						$stage.append("<div class='stop'>遊戲暫停，按P開始遊戲</div>");
+				if (start=="true"){
+					if (x.key=="p"||x.key=="P"){
+						if (stop=="true"){
+							starttime();
+							$(".stop").remove();
+						}
+						else if (stop=="false"){
+							offtime();
+							start="true";
+							$stage.append("<div class='stop'>遊戲暫停，按P開始遊戲</div>");
+						}
 					}
 				}
 			})
@@ -298,34 +331,47 @@
 					}
 				})
 			}
-		//開始遊戲
-		function allstart(){
-			stop="false";
-			start="true";
-			gastime=setInterval(gas,gasmiss)			//消耗燃料
-			yn=setInterval(yn,1000/FPS)					//啟用判斷
-			sumgastime=setInterval(sumgas,1000)			//生成燃料
-			gasdowntime=setInterval(gasdown,1000/FPS)	//燃料下降
-			backtime=setInterval(summonback,sumback)	//生成隕石
-			movebacktime=setInterval(moveback,1000/FPS)	//隕石移動
-			gunflytime=setInterval(gunflying,1000/FPS)	//子彈移動
-		}
-		allstart();
-		//點擊遊戲結束(開始新遊戲)
-		$(".gameover").click(function(){
-			console.log("start game")
-		})
 		//遊戲結束
 		function gameover(){
-			clearInterval(gastime);
-			clearInterval(yn);
-			clearInterval(sumgastime);
-			clearInterval(gasdowntime);
-			clearInterval(backtime);
-			clearInterval(movebacktime);
-			clearInterval(gunflytime);
-			stop="true";
-			$stage.append("<div class='gameover'>遊戲結束，點擊螢幕開始遊戲</div>");
+			offtime();
+			$stage.append("<div class='gameover' id='gameover'>遊戲結束，點擊螢幕開始遊戲</div>");
+			//(開始新遊戲)
+			$(".gameover").mousedown(function(){
+				//清理雜物
+				$(".gascon").remove();
+				$(".mygun").remove();
+				$(".back").remove();
+				$(".gameover").remove();
+				$
+				//變數重設
+				sumbackp=100; 	//生成隕石機率sumbackp分之1
+				score=10; 		//擊破隕石得分數
+				FPS=60;
+				gasmiss=1000;	//燃料消耗速度
+				gashave=15;		//初始燃料
+				backattack=15;	//撞到隕石損失的燃料
+				sump=5;			//燃料生成機率sump/1s
+				gasspeed=1;		//汽油下降速度
+				stop="false";	//檢查遊戲是否暫停
+				start="true";
+				$(".icon").html("0得分");
+				//位置重刷
+				$player.css({
+					top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2,
+					left:0,
+				})
+				$icon.css({
+					left:(parseFloat($stage.css("width"))-parseFloat($icon.css("width")))/2
+				})
+				$gas.html(gashave)
+				$gas.css({
+					left:(parseFloat($stage.css("width"))-parseFloat($gas.css("width"))),
+					top:10,
+					'background-image':"url(gas/gas_"+gashave+".png)",
+				})
+				//系統重啟
+				starttime();
+			})
 		}
 		//燃料消耗
 		function gas(){
@@ -337,8 +383,33 @@
 				})
 			}
 			else{
+				stop=="true";
+				start="false";
 				gameover();
 			}
+		}
+		//生成智能AI
+		function sumenemy(){
+			if (rand(0,sumenemyp)==0){
+				var list=["<div class='enemy1 allenemy'></div>","<div class='enemy2 allenemy'></div>","<div class='enemy3 allenemy'></div>"];
+				$stage.append(list[rand(0,2)]);
+				$find=$stage.find(".allenemy:last");
+				$find.css({
+					top:rand(0,600-parseInt($find.css("height"))),
+					left:parseFloat($stage.css("width")),
+				})
+			}
+			
+		}
+		//智能AI移動
+		function moveenemy(){
+			$stage.find(".allenemy").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-enemyspeed)
+				//刪除AI
+				if ((parseInt($(this).css("left"))<-60)){
+					$(this).remove();
+				}
+			})
 		}
 		//隨機整數
 		function rand(nn,mm){
@@ -385,12 +456,14 @@
 							})
 						}
 						else {//遊戲結束
+							stop=="true";
+							start="false";
 							$(this).remove();
 							gameover();
 						}
 					}
 				})
-			//碰到燃料
+			//玩家碰到燃料
 			$stage.find(".gascon").each(function(){
 				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
 					&&parseFloat($player.css("top"))<parseFloat($(this).css("top"))+parseFloat($(this).css("height"))//下
@@ -410,6 +483,50 @@
 							})
 						}
 						$(this).remove();
+					}
+			})
+			//判斷子彈位置
+			$stage.find(".allenemy").each(function(){
+				var tt=$(this)
+				var find=$stage.find(".mygun").each(function(){
+					if (parseFloat($(this).css("top"))+parseFloat($(this).css("height"))/2>parseFloat(tt.css("top"))//上
+					&&parseFloat($(this).css("top"))+parseFloat($(this).css("height"))/2<parseFloat(tt.css("top"))+parseFloat(tt.css("height"))//下
+					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2>parseFloat(tt.css("left"))//左
+					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2<parseFloat(tt.css("left"))+parseFloat(tt.css("width")))//右
+					{
+						//擊中敵人(消除子彈)
+						if (tt.text()==2){
+							$(this).remove();
+							tt.html(1);
+						}
+						else{
+							//加分
+							$(".icon").html(parseInt($(".icon").text())+score+"得分");
+							//消除敵人&子彈
+							$(this).remove();
+							tt.remove();
+						}
+					}
+				})
+				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
+					&&parseFloat($player.css("top"))<parseFloat($(this).css("top"))+parseFloat($(this).css("height"))//下
+					&&parseFloat($player.css("left"))+parseFloat($player.css("width"))>parseFloat($(this).css("left"))//左
+					&&parseFloat($player.css("left"))<parseFloat($(this).css("left"))+parseFloat($(this).css("width")))//右
+					{
+						//撞到敵人減少燃料
+						if (gashave>backattack){
+							gashave=gashave-backattack;
+							$(this).remove();
+							$gas.css({
+								'background-image':"url(gas/gas_"+gashave+".png)",
+							})
+						}
+						else {//遊戲結束
+							stop=="true";
+							start="false";
+							$(this).remove();
+							gameover();
+						}
 					}
 			})
 		}
@@ -563,9 +680,70 @@
 		user-select: none;
 		z-index: 20;
 		text-align: center;
-		font-size: 80px;
+		font-size: 60px;
 		color: red;
 		line-height:560px;
+	}
+	.bg1{
+		position: absolute;
+		background: url("image/bg_1.png");
+		width: 164px;
+		height: 156px;
+		left: 60px;
+		top: 5px;
+	}
+	.bg2{
+		position: absolute;
+		background: url("image/bg_2.png");
+		width:399px;
+		height: 363px;
+		left: 150px;
+		top: 50px;
+	}
+	.bg3{
+		position: absolute;
+		background: url("image/bg_3.png");
+		width: 167px;
+		height: 162px;
+		left: 200px;
+		top: 400px;
+	}
+	.bg4{
+		position: absolute;
+		background: url("image/bg_4.png");
+		width:430px;
+		height:307px;
+		left:600px;
+		top: 260px;
+	}
+	.bg5{
+		position: absolute;
+		background: url("image/bg_5.png");
+		width: 177px;
+		height: 167px;
+		left: 560px;
+		top: 20px;
+	}
+	.allenemy{
+		
+	}
+	.enemy1{
+		position: absolute;
+		width: 48px;
+		height: 42px;
+		background: url("enemy/enemy_1.png");
+	}
+	.enemy2{
+		position: absolute;
+		width: 48px;
+		height: 41px;
+		background: url("enemy/enemy_2.png");
+	}
+	.enemy3{
+		position: absolute;
+		width: 48px;
+		height: 41px;
+		background: url("enemy/enemy_3.png");
 	}
 </style>
 </head>
@@ -582,6 +760,12 @@
 		<div class="icon">0得分</div>
 		<div class='gas misstext' id="gas"></div>
 		<div class='gastext'>燃料</div>
+		<div class='bg1'></div>
+		<div class='bg2'></div>
+		<div class='bg3'></div>
+		<div class='bg4'></div>
+		<div class='bg5'></div>
+		<div class="enemy1 allenemy text"></div>
 	</div>
 </body>
 	
