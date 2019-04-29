@@ -25,7 +25,7 @@
 		var FPS=60;
 		var gashave=15;		//初始燃料
 		var backattack=15;	//撞到隕石損失的燃料
-		var sump=500;		//燃料生成機率sump/1s
+		var sump=300;		//燃料生成機率sump/1s
 		var gasspeed=1;		//汽油下降速度
 		var stop="true";	//檢查遊戲是否暫停
 		var enemyspeed=2; 	//敵人戰艦移動速度
@@ -86,7 +86,6 @@
 			moveenemytime=setInterval(moveenemy,1000/FPS)
 			movegun=setInterval(gunmove,1000/FPS)
 		}
-		starttime()
 		//關閉計時器
 		function offtime(){
 			stop="true";
@@ -247,21 +246,21 @@
 		//強化敵人
 		function addpwoer(){
 			addtime=addtime+1;
-			if (addtime>=300){
-				addtime=addtime-300;
+			if (addtime>=FPS*5){
+				addtime=addtimeFPS*5;
 				if (sumbackp>100){
-					sumbackp=sumbackp-2		//生成隕石
+					sumbackp=sumbackp-rand(0,3);		//生成隕石
 				}
 				if (sumenemyp>100){
-					sumenemyp=sumenemyp-2;	//生成敵人
+					sumenemyp=sumenemyp-rand(0,3);		//生成敵人
 				}
 				if (shootgunp>100){
-					shootgunp=shootgunp-2;	//敵人發射子彈機率
+					shootgunp=shootgunp-rand(0,3);		//敵人發射子彈機率
 				}
 				if (sump>100){
-					sump=sump-2;			//燃料生成機率
+					sump=sump-rand(0,3);				//燃料生成機率
 				}
-				console.log("隕石"+sumbackp,"敵人"+sumenemyp,"子彈"+shootgunp,"燃料"+sump)
+				//console.log("隕石"+sumbackp,"敵人"+sumenemyp,"子彈"+shootgunp,"燃料"+sump)
 			}
 		}
 		//鍵盤滑鼠事件
@@ -398,10 +397,10 @@
 							offtime();
 							start="true";
 							$stage.append("<div class='stop'>遊戲暫停，按P開始遊戲</div>");
-							$stage.append("<div class='indiv' id='d1'>隕石生成率："+"1/"+parseInt(sumbackp/FPS)+"</div>");
-							$stage.append("<div class='indiv' id='d2'>敵人生成率："+"1/"+parseInt(sumenemyp/FPS)+"</div>");
-							$stage.append("<div class='indiv' id='d3'>敵人發射子彈機率："+"1/"+parseInt(shootgunp/FPS)+"</div>");
-							$stage.append("<div class='indiv' id='d4'>燃料生成機率："+"1/"+parseInt(sump/FPS)+"</div>");
+							$stage.append("<div class='indiv' id='d1'>隕石生成率："+"1/"+parseInt((sumbackp/FPS)*100)/100+"</div>");
+							$stage.append("<div class='indiv' id='d2'>敵人生成率："+"1/"+parseInt((sumenemyp/FPS)*100)/100+"</div>");
+							$stage.append("<div class='indiv' id='d3'>敵人發射子彈機率："+"1/"+parseInt((shootgunp/FPS)*100)/100+"</div>");
+							$stage.append("<div class='indiv' id='d4'>燃料生成機率："+"1/"+parseInt((sump/FPS)*100)/100+"</div>");
 							
 						}
 					}
@@ -439,7 +438,7 @@
 				gasmiss=1000;	//燃料消耗速度
 				gashave=15;		//初始燃料
 				backattack=15;	//撞到隕石損失的燃料
-				sump=500;		//燃料生成機率sump/1s
+				sump=300;		//燃料生成機率sump/1s
 				gasspeed=1;		//汽油下降速度
 				stop="false";	//檢查遊戲是否暫停
 				start="true";
@@ -590,7 +589,7 @@
 						}
 						else{
 							//加分
-							$(".icon").html(parseInt($(".icon").text())+score+"得分");
+							$(".icon").html(parseInt($(".icon").text())+5+"得分");
 							//消除敵人&子彈
 							$(this).remove();
 							tt.remove();
@@ -644,6 +643,32 @@
 					}
 			})
 		}
+		//FPS
+		var frames = 0,fff=0;
+		setInterval(function(){
+			fff++;    
+		},1000/60)
+		setInterval(function(){
+			frames++;  
+			if (frames>0){
+				$(".FPS").html("FPS:"+fff);
+				FPS=fff;
+				fff=0;
+				frames = 0;
+		}}, 1000);
+		//開始遊戲按鈕
+		$(".button").click(function(){
+			starttime()
+			$(".start").remove();
+		})
+		$(".button").mousemove(function(){
+			$(".button").css("background","#f19e0d")
+		})
+		$(".button").mouseout(function(){
+			$(".button").css("background","white")
+		})
+			
+		
 	})
 </script>
 <style type="text/css">
@@ -873,6 +898,31 @@
 		width: 960px;
 		height: 40px;
 		z-index: 20;
+		user-select: none;
+	}
+	.FPS{
+		position: absolute;
+		font-size: 20px;
+		color:#E800FF;
+		width: 60px;
+		height: 40px;
+		z-index: 100;
+		left: 890px;
+		top: 570px;
+		user-select: none;
+	}
+	.start{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		text-align: center;
+		background: url("image/stop.png");
+	}
+	.button{
+		width: 200px;
+		height: 80px;
+		font-size: 80px;
+		margin-top: 260px;
 	}
 </style>
 </head>
@@ -894,6 +944,8 @@
 		<div class='bg3'></div>
 		<div class='bg4'></div>
 		<div class='bg5'></div>
+		<div class="FPS">FPS:60</div>
+		<div class="start"><input type="button" value="start" class="button"></div>
 	</div>
 </body>
 	
