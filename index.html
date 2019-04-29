@@ -8,23 +8,34 @@
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script>
 	$(function(){
-		var newgame;
+		var yn;
 		var tmp;
-		var start="true";
+		var start="false";
 		var timeup;
 		var timedown;
 		var timeright;
-		var timeleft;
-		var gunflytime;
+		var timeleft
 		var $find;
 		var $findgun;
 		var $overfind;
+		var gunspped=8; 	//子彈速度
+		var sumback=500;	//隕石生成速度 1000=1s
+		var sumbackp=10; 	//生成隕石機率sumbackp分之1
+		var score=10; 		//擊破隕石得分數
+		var FPS=60;
+		var gasmiss=1000;	//燃料消耗速度
+		var gashave=15;		//初始燃料
+		var backattack=15;	//撞到隕石損失的燃料
+		var sump=5;			//燃料生成機率sump/1s
+		var gasspeed=1;		//汽油下降速度
+		var stop="true";	//檢查遊戲是否暫停
+		//循環時間變數;
+		var gunflytime;
 		var backtime;
 		var movebacktime="";
-		var gunspped=8; //子彈速度
-		var sumback=200; //隕石生成速度 1000=1s
-		var sumbackp=10; //機率sumbackp分之1
-		var score=10; //擊破隕石得分數
+		var gastime;
+		var sumgastime;
+		var gasdowntime;
 		//移動速度
 		var upspeed=4;
 		var downspeed=4;
@@ -40,12 +51,19 @@
 		$stage=$(".stage");		//背景
 		$mygun=$(".mygun");		//子彈
 		$icon=$(".icon");		//記分板
-		//起始高度
+		$gas=$(".gas");			//燃料
+		//起始設定
 		$player.css({
 			top:(parseFloat($stage.css("height"))-parseFloat($player.css("height")))/2
 		})
 		$icon.css({
 			left:(parseFloat($stage.css("width"))-parseFloat($icon.css("width")))/2
+		})
+		$gas.html(gashave)
+		$gas.css({
+			left:(parseFloat($stage.css("width"))-parseFloat($gas.css("width"))),
+			top:10,
+			'background-image':"url(gas/gas_"+gashave+".png)",
 		})
 		//移動隕石
 		function moveback(){
@@ -86,7 +104,7 @@
 			})
 		}
 		//隨機生成(移動)隕石
-		backtime=setInterval(function(){
+		function summonback(){
 			if (rand(0,sumbackp)==0){
 				var list=["<div class='back1 back'>2</div>","<div class='back2  back'>2</div>","<div class='back3  back'>2</div>","<div class='back4  back'>2</div>","<div class='back5  back'>2</div>"];
 				var temp=rand(0,4)
@@ -126,22 +144,43 @@
 						top:rand(-300,600),
 					})
 				}
-				if (movebacktime=="")movebacktime=setInterval(moveback,1000/60)
 			}
-		},sumback)
+		}
+		//隨機生成燃料
+		function sumgas(){
+			if (rand(0,sump)==0){
+				$stage.append("<div class='gascon'></div>")
+				$find=$stage.find(".gascon:last")
+				$find.css({
+					top:0-parseInt($find.css("height")),
+					left:rand(0,600),
+				})
+			}
+		}
+		//燃料下降(刪除)
+		function gasdown(){
+			$stage.find(".gascon").each(function(){
+				$(this).css({
+					top:parseFloat($(this).css("top"))+gasspeed,
+				})
+				if (parseFloat($(this).css("top"))>600){
+					$(this).remove();	
+				}
+			})
+		}
 		//鍵盤滑鼠事件
 			//上下左右移動
 			//向上
 			$(".up").mousedown(function(){
 				clearInterval(timeup)
 				timeup=setInterval(function(){
-					if (start=="true"){
+					if (stop=="false"){
 						tmp=(parseFloat($player.css("top")))-upspeed
 						if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
 							$player.css("top",tmp)
 						}
 					}
-				},1000/60)
+				},1000/FPS)
 			})
 			$(".up").mouseup(function(){
 				clearInterval(timeup)
@@ -153,13 +192,13 @@
 			$(".down").mousedown(function(){
 				clearInterval(timedown)
 				timedown=setInterval(function(){
-					if (start=="true"){
+					if (stop=="false"){
 						tmp=(parseFloat($player.css("top")))+downspeed
 						if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
 							$player.css("top",tmp)
 						}
 					}
-				},1000/60)
+				},1000/FPS)
 			})
 			$(".down").mouseup(function(){
 				clearInterval(timedown)
@@ -171,13 +210,13 @@
 			$(".right").mousedown(function(){
 				clearInterval(timeright)
 				timeright=setInterval(function(){
-					if (start=="true"){
+					if (stop=="false"){
 						tmp=(parseFloat($player.css("left")))+rightspeed
 						if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
 							$player.css("left",tmp)
 						}
 					}
-				},1000/60)
+				},1000/FPS)
 			})
 			$(".right").mouseup(function(){
 				clearInterval(timeright)
@@ -189,13 +228,13 @@
 			$(".left").mousedown(function(){
 				clearInterval(timeleft)
 				timeleft=setInterval(function(){
-					if (start=="true"){
+					if (stop=="false"){
 						tmp=(parseFloat($player.css("left")))-leftspeed
 						if (tmp>0){
 							$player.css("left",tmp)
 						}
 					}
-				},1000/60)
+				},1000/FPS)
 			})
 			$(".left").mouseup(function(){
 				clearInterval(timeleft)
@@ -207,9 +246,9 @@
 			$("body").contextmenu(function(x){
 				x.preventDefault();
 			})
-			//空白艦發射子彈
+			//空白建發射子彈
 			$("body").keyup(function(x,y){
-				if (start=="true"){
+				if (stop=="false"){
 					if (x.key==" "){
 						$stage.append("<div class='mygun'></div>")
 						$find=$stage.find(".mygun:last");
@@ -219,10 +258,38 @@
 						})
 						
 					}
+					
+				}
+				
+			})
+			//遊戲暫停(開啟)
+			$("body").keyup(function(x,y){
+				if (x.key=="p"||x.key=="P"){
+					if (stop=="true"){
+						stop="false";
+						start="true";
+						gastime=setInterval(gas,gasmiss)			//消耗燃料
+						sumgastime=setInterval(sumgas,1000)			//生成燃料
+						gasdowntime=setInterval(gasdown,1000/FPS)	//燃料下降
+						backtime=setInterval(summonback,sumback)	//生成隕石
+						movebacktime=setInterval(moveback,1000/FPS)	//隕石移動
+						gunflytime=setInterval(gunflying,1000/FPS)	//子彈移動
+						$(".stop").remove();
+					}
+					else if (stop=="false"){
+						clearInterval(gastime);
+						clearInterval(sumgastime);
+						clearInterval(gasdowntime);
+						clearInterval(backtime);
+						clearInterval(movebacktime);
+						clearInterval(gunflytime);
+						stop="true";
+						$stage.append("<div class='stop'>遊戲暫停，按P開始遊戲</div>");
+					}
 				}
 			})
 			//子彈前進
-			gunflytime=setInterval(function(){
+			function gunflying(){
 				$findgun=$stage.find(".mygun").each(function(){
 					$(this).css("left",parseFloat($(this).css("left"))+gunspped)
 					//刪除子彈(超出螢幕)
@@ -230,11 +297,48 @@
 						$(this).remove();
 					}
 				})
-				
-			},1000/60)
+			}
 		//開始遊戲
-		function start(){
-			
+		function allstart(){
+			stop="false";
+			start="true";
+			gastime=setInterval(gas,gasmiss)			//消耗燃料
+			yn=setInterval(yn,1000/FPS)					//啟用判斷
+			sumgastime=setInterval(sumgas,1000)			//生成燃料
+			gasdowntime=setInterval(gasdown,1000/FPS)	//燃料下降
+			backtime=setInterval(summonback,sumback)	//生成隕石
+			movebacktime=setInterval(moveback,1000/FPS)	//隕石移動
+			gunflytime=setInterval(gunflying,1000/FPS)	//子彈移動
+		}
+		allstart();
+		//點擊遊戲結束(開始新遊戲)
+		$(".gameover").click(function(){
+			console.log("start game")
+		})
+		//遊戲結束
+		function gameover(){
+			clearInterval(gastime);
+			clearInterval(yn);
+			clearInterval(sumgastime);
+			clearInterval(gasdowntime);
+			clearInterval(backtime);
+			clearInterval(movebacktime);
+			clearInterval(gunflytime);
+			stop="true";
+			$stage.append("<div class='gameover'>遊戲結束，點擊螢幕開始遊戲</div>");
+		}
+		//燃料消耗
+		function gas(){
+			if (gashave>0){
+				gashave=gashave-1;
+				$gas.html(gashave)
+				$gas.css({
+					'background-image':"url(gas/gas_"+gashave+".png)"
+				})
+			}
+			else{
+				gameover();
+			}
 		}
 		//隨機整數
 		function rand(nn,mm){
@@ -266,10 +370,49 @@
 						}
 					}
 				})
-				
+				//玩家碰撞隕石
+				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))/2>parseFloat($(this).css("top"))//上
+					&&parseFloat($player.css("top"))+parseFloat($player.css("height"))/2<parseFloat($(this).css("top"))+parseFloat($(this).css("height"))//下
+					&&parseFloat($player.css("left"))+parseFloat($player.css("width"))/2>parseFloat($(this).css("left"))//左
+					&&parseFloat($player.css("left"))+parseFloat($player.css("width"))/2<parseFloat($(this).css("left"))+parseFloat($(this).css("width")))//右
+					{
+						//撞到隕石減少燃料
+						if (gashave>backattack){
+							gashave=gashave-backattack;
+							$(this).remove();
+							$gas.css({
+								'background-image':"url(gas/gas_"+gashave+".png)",
+							})
+						}
+						else {//遊戲結束
+							$(this).remove();
+							gameover();
+						}
+					}
+				})
+			//碰到燃料
+			$stage.find(".gascon").each(function(){
+				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
+					&&parseFloat($player.css("top"))<parseFloat($(this).css("top"))+parseFloat($(this).css("height"))//下
+					&&parseFloat($player.css("left"))+parseFloat($player.css("width"))>parseFloat($(this).css("left"))//左
+					&&parseFloat($player.css("left"))<parseFloat($(this).css("left"))+parseFloat($(this).css("width")))//右
+					{
+						if (gashave<15){
+							gashave=gashave+15;
+							$gas.css({
+								'background-image':"url(gas/gas_"+gashave+".png)",
+							})
+						}
+						else{
+							gashave=30;
+							$gas.css({
+								'background-image':"url(gas/gas_"+gashave+".png)",
+							})
+						}
+						$(this).remove();
+					}
 			})
 		}
-		newgame=setInterval(yn,1000/60)
 	})
 </script>
 <style type="text/css">
@@ -287,13 +430,13 @@
 		width: 50px;
 		height: 30px;
 		position: absolute;
-		z-index: 1;
+		z-index: 10;
 	}
 	.move{
 		width: 40px;
 		height: 40px;
 		position: absolute;
-		z-index: 2;
+		z-index: 11;
 	}
 	.up{
 		background:url("image/up.png");
@@ -372,6 +515,57 @@
 		text-align: center;
 		color: gold;
 		left: 390px;
+		z-index: 8;
+		user-select: none;
+	}
+	.gas{
+		position: absolute;
+		width: 300px;
+		height: 32px;
+		left: 600px;
+		z-index: 9;
+	}
+	.gastext{
+		position: absolute;
+		color: gold;
+		font-size: 30px;
+		top: 8px;
+		left: 600px;
+		z-index: 8;
+		user-select: none;
+	}
+	.misstext{
+		font-size: 0px;
+	}
+	.gascon{
+		width: 44px;
+		height: 61px;
+		position: absolute;
+		background: url("image/gas.png");
+	}
+	.stop{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		background: url("image/stop.png");
+		user-select: none;
+		z-index: 20;
+		text-align: center;
+		font-size: 80px;
+		color: red;
+		line-height:560px;
+	}
+	.gameover{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		background: url("image/stop.png");
+		user-select: none;
+		z-index: 20;
+		text-align: center;
+		font-size: 80px;
+		color: red;
+		line-height:560px;
 	}
 </style>
 </head>
@@ -386,6 +580,8 @@
 		<div class="move right"></div>
 		<div class="move midden"></div>
 		<div class="icon">0得分</div>
+		<div class='gas misstext' id="gas"></div>
+		<div class='gastext'>燃料</div>
 	</div>
 </body>
 	
