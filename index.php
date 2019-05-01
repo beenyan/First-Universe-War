@@ -12,6 +12,29 @@
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="soundmanager2-jsmin.js"></script>
+<script>
+	var mybackSound;
+	var myshootSound;
+	var boommusic;
+	soundManager.setup({
+		onready: function() {
+			mybackSound = soundManager.createSound({
+			  id: 'aSound',
+			  url: 'music/backmusic.mp3'
+			});
+			myshootSound = soundManager.createSound({
+			  id: 'bSound',
+			  url: 'music/shootmusic.wav'
+			});
+			boommusic = soundManager.createSound({
+			  id: 'cSound',
+			  url: 'music/boommusic.wav'
+			});
+		},
+	});
+</script>
 <script>
 	$(function(){
 		var st;
@@ -92,7 +115,8 @@
 			movegun=setInterval(gunmove,1000/FPS)			//11.敵人子彈移動
 			addenemytime=setInterval(addpwoer,1000/FPS)		//12.強化敵人
 			$(".bg").css("animation-duration","40s")		//13.背景移動
-			flytime=setInterval(fly,1000)					//計算飛行時間
+			flytime=setInterval(fly,1000)					//14.計算飛行時間
+			mybackSound.play();								//15.開啟背景音樂
 		}
 		function text(){
 			stop="false";
@@ -121,6 +145,9 @@
 			clearInterval(addenemytime);
 			$(".bg").css("animation-duration","8000000s")
 			clearInterval(flytime);
+			mybackSound.pause();
+			boommusic.pause()
+			myshootSound.pause()
 		}
 		//起始設定
 		$player.css({
@@ -399,6 +426,7 @@
 						left:parseFloat($player.css("left"))+35,
 						top:parseFloat($player.css("top"))+10,
 					})
+					myshootSound.play();
 				}
 			}
 		})
@@ -629,6 +657,7 @@
 							//消除隕石子彈
 							$(this).remove();
 							tt.remove();
+							boommusic.play()
 						}
 					}
 				})
@@ -685,18 +714,12 @@
 					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2>parseFloat(tt.css("left"))//左
 					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2<parseFloat(tt.css("left"))+parseFloat(tt.css("width")))//右
 					{
-						//擊中敵人(消除子彈)
-						if (tt.text()==2){
-							$(this).remove();
-							tt.html(1);
-						}
-						else{
-							//加分
-							$(".icon").html(parseInt($(".icon").text())+5+"得分");
-							//消除敵人&子彈
-							$(this).remove();
-							tt.remove();
-						}
+						//加分
+						$(".icon").html(parseInt($(".icon").text())+5+"得分");
+						//消除敵人&子彈
+						$(this).remove();
+						tt.remove();
+						boommusic.play()
 					}
 				})
 				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
