@@ -264,9 +264,18 @@ div{
 	.menu{
 		font-size: 20px;
 		position: absolute;
-		text-align: center;
 		background: url("image/stop.png");
 		width: 960px;
 		height: 600px;
-		text-align: center;
+		text-align: left;
+	}
+	.in{
+		position: absolute;
+		font-size: 30px;
+		color:#C50003;
+		width: 960px;
+		height: 20px;
+		z-index: 20;
+		user-select: none;
+		left: 300px;
 	}

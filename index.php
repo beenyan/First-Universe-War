@@ -497,7 +497,7 @@
 				})
 				$("#gameover").remove();
 				if (fin=="false"){
-					var temp="<div class='gameover' id='showcon'><table border='1' id='e1'><tbody><tr><td colspan='4'>排名</td></tr><tr><td>名次</td><td>名子</td><td>分數</td><td>時間</td></tr><tr><td>"+line0[0]+"</td><td>"+line0[1]+"</td><td>"+line0[2]+"</td><td>"+line0[3]+"秒</td></tr><tr><td>"+line1[0]+"</td><td>"+line1[1]+"</td><td>"+line1[2]+"</td><td>"+line1[3]+"秒</td></tr><tr><td>"+line2[0]+"</td><td>"+line2[1]+"</td><td>"+line2[2]+"</td><td>"+line2[3]+"秒</td></tr><tr style='background-color: cornflowerblue'><td>"+line3[0]+"</td><td>"+line3[1]+"</td><td>"+line3[2]+"</td><td>"+line3[3]+"秒</td></tr><tr><td colspan='4'><input type='button' id='finish' value='Start game'><br></td></tr></tbody></table></div>"
+					var temp="<div class='gameover' id='showcon'><table border='1' id='e1'><tbody><tr><td colspan='4'>排名</td></tr><tr><td>名次</td><td>名子</td><td>分數</td><td>存活時間</td></tr><tr><td>"+line0[0]+"</td><td>"+line0[1]+"</td><td>"+line0[2]+"</td><td>"+line0[3]+"秒</td></tr><tr><td>"+line1[0]+"</td><td>"+line1[1]+"</td><td>"+line1[2]+"</td><td>"+line1[3]+"秒</td></tr><tr><td>"+line2[0]+"</td><td>"+line2[1]+"</td><td>"+line2[2]+"</td><td>"+line2[3]+"秒</td></tr><tr style='background-color: cornflowerblue'><td>"+line3[0]+"</td><td>"+line3[1]+"</td><td>"+line3[2]+"</td><td>"+line3[3]+"秒</td></tr><tr><td colspan='4'><input type='button' id='finish' value='Start game'><br></td></tr></tbody></table></div>"
 				}
 				else{
 					var tline1="";
@@ -512,7 +512,7 @@
 					else {
 						tline3="style='background-color: cornflowerblue'";
 					}
-					var temp="<div class='gameover' id='showcon'><table border='1' id='e1'><tbody><tr><td colspan='4'>排名</td></tr><tr><td>名次</td><td>名子</td><td>分數</td><td>時間</td></tr><tr "+tline1+"><td>"+line0[0]+"</td><td>"+line0[1]+"</td><td>"+line0[2]+"</td><td>"+line0[3]+"秒</td></tr><tr "+tline2+"><td>"+line1[0]+"</td><td>"+line1[1]+"</td><td>"+line1[2]+"</td><td>"+line1[3]+"秒</td></tr><tr "+tline3+"><td>"+line2[0]+"</td><td>"+line2[1]+"</td><td>"+line2[2]+"</td><td>"+line2[3]+"秒</td></tr><tr><td colspan='4'><input type='button' id='finish' value='Start game'><br></td></tr></tbody></table></div>"
+					var temp="<div class='gameover' id='showcon'><table border='1' id='e1'><tbody><tr><td colspan='4'>排名</td></tr><tr><td>名次</td><td>名子</td><td>分數</td><td>存活時間</td></tr><tr "+tline1+"><td>"+line0[0]+"</td><td>"+line0[1]+"</td><td>"+line0[2]+"</td><td>"+line0[3]+"秒</td></tr><tr "+tline2+"><td>"+line1[0]+"</td><td>"+line1[1]+"</td><td>"+line1[2]+"</td><td>"+line1[3]+"秒</td></tr><tr "+tline3+"><td>"+line2[0]+"</td><td>"+line2[1]+"</td><td>"+line2[2]+"</td><td>"+line2[3]+"秒</td></tr><tr><td colspan='4'><input type='button' id='finish' value='Start game'><br></td></tr></tbody></table></div>"
 				}
 				$stage.append(temp);
 				$("#finish").click(function(){
@@ -786,9 +786,14 @@
 		},1000)
 		//遊戲教學
 		$("#study").click(function(){
-			$("#biggen").remove()
-			$stage.append("<div class='menu'>123</div>");
+			$("#biggen").hide();
+			$stage.append("<div class='menu'><div class='in' style='top:80px;'>1.空白艦發射子彈</div><div class='in' style='top:110px;'>2.WSAD或左下角方向建移動</div><div class='in' style='top:140px;'>3.擊碎隕石得10分，擊碎敵人機體得5分</div><div class='in' style='top:170px;'>4.玩得愉快</div><input type='button' id='back' value='back'></div>");
+			$("#back").click(function(){
+				$(".menu").remove();
+				$("#biggen").show();
+			})
 		})
+		
 	})
 </script>
 <link type="text/css" href="allcss.css" rel="stylesheet">
