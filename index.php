@@ -86,6 +86,7 @@
 		var movegun;
 		var addenemytime;
 		var flytime;
+		var time60;
 		//移動速度
 		var upspeed=4;
 		var downspeed=4;
@@ -857,7 +858,10 @@
 				})
 			})
 		})
-		
+		//統整60FPS計時器
+		function alltime(){
+			
+		}
 	})
 </script>
 <link type="text/css" href="allcss.css" rel="stylesheet">

@@ -275,10 +275,10 @@ div{
 .musiccon{
 	position: absolute;
 	background: url("image/musicopen.png");
-	width: 21px;
-	height: 18px;
-	top: 30px;
-	left: 250px;
+	width: 64px;
+	height: 64px;
+	top: 5px;
+	left: 240px;
 }
 .leftfont{
 	position: absolute;
