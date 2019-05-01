@@ -18,19 +18,23 @@
 	var mybackSound;
 	var myshootSound;
 	var boommusic;
+	var music="true";
 	soundManager.setup({
 		onready: function() {
 			mybackSound = soundManager.createSound({
-			  id: 'aSound',
-			  url: 'music/backmusic.mp3'
+				id: 'aSound',
+				url: 'music/backmusic.mp3',
+				volume:15,
 			});
 			myshootSound = soundManager.createSound({
-			  id: 'bSound',
-			  url: 'music/shootmusic.wav'
+				id: 'bSound',
+				url: 'music/shootmusic.wav',
+				volume:15,
 			});
 			boommusic = soundManager.createSound({
-			  id: 'cSound',
-			  url: 'music/boommusic.wav'
+				id: 'cSound',
+				url: 'music/boommusic.wav',
+				volume:15,
 			});
 		},
 	});
@@ -102,7 +106,7 @@
 		function starttime(){
 			stop="false";
 			start="true";
-			gastime=setInterval(gas,1000)				//1.消耗燃料
+			gastime=setInterval(gas,1000)					//1.消耗燃料
 			st=setInterval(yn,1000/FPS)						//2.啟用判斷
 			sumgastime=setInterval(sumgas,1000/FPS)			//3.生成燃料
 			gasdowntime=setInterval(gasdown,1000/FPS)		//4.燃料下降
@@ -116,7 +120,9 @@
 			addenemytime=setInterval(addpwoer,1000/FPS)		//12.強化敵人
 			$(".bg").css("animation-duration","40s")		//13.背景移動
 			flytime=setInterval(fly,1000)					//14.計算飛行時間
-			mybackSound.play();								//15.開啟背景音樂
+			if (music=="true"){
+				mybackSound.play();							//15.開啟背景音樂
+			}
 		}
 		function text(){
 			stop="false";
@@ -156,11 +162,9 @@
 		$icon.css({
 			left:(parseFloat($stage.css("width"))-parseFloat($icon.css("width")))/2
 		})
-		$gas.html(gashave)
 		$gas.css({
-			left:(parseFloat($stage.css("width"))-parseFloat($gas.css("width"))),
 			top:10,
-			'background-image':"url(gas/gas_"+gashave+".png)",
+			width:150,
 		})
 		//移動隕石
 		function moveback(){
@@ -426,7 +430,9 @@
 						left:parseFloat($player.css("left"))+35,
 						top:parseFloat($player.css("top"))+10,
 					})
-					myshootSound.play();
+					if (music=="true"){
+						myshootSound.play();
+					}
 				}
 			}
 		})
@@ -553,6 +559,7 @@
 					$(".allenemy").remove();
 					$(".enemygun").remove();
 					//變數重設
+					
 					flyalltime=0;
 					shootgunp=500;
 					sumenemyp=500;
@@ -566,6 +573,7 @@
 					gasspeed=1;		//汽油下降速度
 					stop="false";	//檢查遊戲是否暫停
 					start="true";
+					$("#showtime").html(0+":"+0);
 					$(".icon").html("0得分");
 					//位置重刷
 					$player.css({
@@ -575,11 +583,9 @@
 					$icon.css({
 						left:(parseFloat($stage.css("width"))-parseFloat($icon.css("width")))/2
 					})
-					$gas.html(gashave)
 					$gas.css({
-						left:(parseFloat($stage.css("width"))-parseFloat($gas.css("width"))),
 						top:10,
-						'background-image':"url(gas/gas_"+gashave+".png)",
+						width:150,
 					})
 					//系統重啟
 					starttime();
@@ -596,9 +602,8 @@
 		function gas(){
 			if (gashave>0){
 				gashave=gashave-1;
-				$gas.html(gashave)
 				$gas.css({
-					'background-image':"url(gas/gas_"+gashave+".png)"
+					width:gashave*10,
 				})
 			}
 			else{
@@ -657,7 +662,9 @@
 							//消除隕石子彈
 							$(this).remove();
 							tt.remove();
-							boommusic.play()
+							if (music=="true"){
+								boommusic.play()
+							}
 						}
 					}
 				})
@@ -672,7 +679,7 @@
 							gashave=gashave-backattack;
 							$(this).remove();
 							$gas.css({
-								'background-image':"url(gas/gas_"+gashave+".png)",
+								width:gashave*10
 							})
 						}
 						else {//遊戲結束
@@ -693,13 +700,13 @@
 						if (gashave<15){
 							gashave=gashave+15;
 							$gas.css({
-								'background-image':"url(gas/gas_"+gashave+".png)",
+								width:gashave*10
 							})
 						}
 						else{
 							gashave=30;
 							$gas.css({
-								'background-image':"url(gas/gas_"+gashave+".png)",
+								width:gashave*10
 							})
 						}
 						$(this).remove();
@@ -719,7 +726,9 @@
 						//消除敵人&子彈
 						$(this).remove();
 						tt.remove();
-						boommusic.play()
+						if (music=="true"){
+							boommusic.play()
+						}
 					}
 				})
 				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
@@ -732,7 +741,7 @@
 							gashave=gashave-backattack;
 							$(this).remove();
 							$gas.css({
-								'background-image':"url(gas/gas_"+gashave+".png)",
+								width:gashave*10
 							})
 						}
 						else {//遊戲結束
@@ -757,7 +766,7 @@
 							gashave=gashave-backattack;
 							$(this).remove();
 							$gas.css({
-								'background-image':"url(gas/gas_"+gashave+".png)",
+								width:gashave*10
 							})
 						}
 						else {//遊戲結束
@@ -816,6 +825,38 @@
 				$("#biggen").show();
 			})
 		})
+		//音樂圖案
+		$(".musiccon").click(function(){
+			if (music=="true"){
+				$(".musiccon").css({
+					'background-image':"url('image/musicclose.png')",
+				})
+				music="false";
+				mybackSound.pause();
+			}
+			else{
+				$(".musiccon").css({
+					'background-image':"url('image/musicopen.png')",
+				})
+				music="true";
+				mybackSound.play();
+			}
+		})
+		//字體大小
+		$(".leftfont").click(function(){
+			$("*:not(.back)").each(function(){
+				$(this).css({
+					"font-size":parseInt($(this).css("font-size"))-1
+				})
+			})
+		})
+		$(".rightfont").click(function(){
+			$("*:not(.back)").each(function(){
+				$(this).css({
+					"font-size":parseInt($(this).css("font-size"))+1
+				})
+			})
+		})
 		
 	})
 </script>
@@ -833,7 +874,6 @@
 		<div class="move right"></div>
 		<div class="move midden"></div>
 		<div class="icon">0得分</div>
-		<div class='gas misstext' id="gas"></div>
 		<div class='gastext'>燃料</div>
 		<div class="FPS">FPS:60</div>
 		<div class="start" id="biggen">
@@ -842,6 +882,13 @@
 		</div>
 		<div class="stopstrat"></div>
 		<div class="clack" id="showtime" style="user-select:none">0:0</div>
+		<div class="musiccon"></div>
+		<div class="leftfont">- &nbsp;&nbsp;字</div>
+		<div class="rightfont">體 &nbsp;&nbsp;+</div>
+		<!--燃料-->
+		<div id="gasback"></div>
+		<div id="gasline"></div>
+		<div class="gas" id="gas"></div>
 	</div>
 </body>
 </html>
