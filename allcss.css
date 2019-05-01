@@ -1,0 +1,272 @@
+@charset "utf-8";
+/* CSS Document */
+div{
+		position:absolute;
+	}
+	.stage{
+		width:960px;	
+		height:600px;
+		position:absolute;
+		top:0; left:0; right:0; bottom:0;
+		margin:auto;
+		overflow: hidden;
+	}
+	.player{
+		background:url("image/fly.png");
+		width: 50px;
+		height: 30px;
+		position: absolute;
+		z-index: 10;
+	}
+	.move{
+		width: 40px;
+		height: 40px;
+		position: absolute;
+		z-index: 11;
+	}
+	.up{
+		background:url("image/up.png");
+		left: 40px;
+		top: 480px;
+	}
+	.down{
+		background:url("image/down.png");
+		left: 40px;
+		top: 560px;
+	}
+	.left{
+		background:url("image/left.png");
+		left: 0px;
+		top: 520px;
+	}
+	.right{
+		background:url("image/right.png");
+		left: 80px;
+		top: 520px;
+	}
+	.midden{
+		background:url("image/midden.png");
+		left: 40px;
+		top: 520px;
+	}
+	.mygun{
+		background:url("image/mygun.png");
+		position: absolute;
+		width: 20px;
+		height: 10px;
+	}
+	.back1{
+		position: absolute;
+		width: 230px;
+		height: 220px;
+		background: url(image/back1.png);
+	}
+	.back2{
+		position: absolute;
+		width: 320px;
+		height: 318px;
+		background: url(image/back2.png);
+	}
+	.back3{
+		position: absolute;
+		width: 68px;
+		height: 66px;
+		background: url(image/back3.png);
+	}
+	.back4{
+		position: absolute;
+		width: 48px;
+		height: 44px;
+		background: url(image/back4.png);
+	}
+	.back5{
+		position: absolute;
+		width: 180px;
+		height: 180px;
+		background: url(image/back5.png);
+	}
+	.back{
+		font-size:0px;
+	}
+	.text{
+		left: 700px;
+		top: 200px;
+	}
+	.icon{
+		position: absolute;
+		width: 300px;
+		height: 40px;
+		background: url("image/icon.png");
+		font-size: 60px;
+		text-align: center;
+		color: gold;
+		left: 390px;
+		z-index: 8;
+		user-select: none;
+	}
+	.gas{
+		position: absolute;
+		width: 300px;
+		height: 32px;
+		left: 600px;
+		z-index: 9;
+	}
+	.gastext{
+		position: absolute;
+		color: gold;
+		font-size: 30px;
+		top: 8px;
+		left: 600px;
+		z-index: 8;
+		user-select: none;
+	}
+	.misstext{
+		font-size: 0px;
+	}
+	.gascon{
+		width: 44px;
+		height: 61px;
+		position: absolute;
+		background: url("image/gas.png");
+	}
+	.stop{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		background: url("image/stop.png");
+		user-select: none;
+		z-index: 20;
+		text-align: center;
+		font-size: 80px;
+		color: red;
+		line-height:560px;
+	}
+	.gameover{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		background: url("image/stop.png");
+		user-select: none;
+		z-index: 20;
+		text-align: center;
+		color: red;
+	}
+	.allenemy{
+		z-index: 5;
+	}
+	.enemy1{
+		position: absolute;
+		width: 48px;
+		height: 42px;
+		background: url("enemy/enemy_1.png");
+	}
+	.enemy2{
+		position: absolute;
+		width: 48px;
+		height: 41px;
+		background: url("enemy/enemy_2.png");
+	}
+	.enemy3{
+		position: absolute;
+		width: 48px;
+		height: 41px;
+		background: url("enemy/enemy_3.png");
+	}
+	.enemygun{
+		z-index: 4;
+		background: url("enemy/enemygun.png");
+		width: 20px;
+		height: 5px;
+		position: absolute;
+	}
+	.indiv{
+		position: relative;
+		font-size: 40px;
+		color:#F8FF00;
+		width: 960px;
+		height: 40px;
+		z-index: 20;
+		user-select: none;
+	}
+	.FPS{
+		position: absolute;
+		font-size: 20px;
+		color:#E800FF;
+		width: 60px;
+		height: 40px;
+		z-index: 100;
+		left: 890px;
+		top: 570px;
+		user-select: none;
+	}
+	.start{
+		position: absolute;
+		width: 960px;
+		height: 600px;
+		text-align: center;
+		background: url("image/stop.png");
+	}
+	.button{
+		width: 200px;
+		height: 80px;
+		font-size: 80px;
+		margin-top: 260px;
+	}
+	.stopstrat{
+		z-index: 21;
+		position: absolute;
+		background: url("image/gamestop.png");
+		width: 64px;
+		height: 64px;
+		left: 800px;
+		top: 536px;
+	}
+	@keyframes bm{
+		0%  {left:0px;}
+  		100%   {left:-7680px;}
+	}
+	.bg{
+		background:url("image/stage.jpg");
+		width:8640px;	
+		height:600px;
+		position:absolute;
+		animation-name: bm;
+		animation-duration: 8000000s;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+	}
+	#e0{
+		font-size: 60px;
+		position: absolute;
+		left: 180px;
+		width: 600px;
+		top: 80px;
+	}
+	.clack{
+		background: url("image/clock.png");
+		width: 64px;
+		height: 64px;
+		position: absolute;
+		left: 300px;
+		top: 5px;
+		text-align: center;
+		line-height: 65px;
+		color: palevioletred;
+		z-index: 20;
+	}
+	#e1{
+		font-size: 40px;
+		position: absolute;
+		left: 180px;
+		width: 600px;
+		top: 80px;
+	}
+	.menu{
+		font-size: 20px;
+		position: absolute;
+		text-align: center;
+		background: url("image/stop.png");
+		width: 960px;
+		height: 600px;
+		text-align: center;
+	}
