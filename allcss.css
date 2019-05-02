@@ -289,7 +289,7 @@ div{
 .menu{
 	font-size: 20px;
 	position: absolute;
-	background: url("image/stop.png");
+	background: url("move/stop.png");
 	width: 960px;
 	height: 600px;
 	text-align: left;
