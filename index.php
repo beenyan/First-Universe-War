@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	$db=mysqli_connect("localhost","root","","shootgame");
 	mysqli_query($db,"SET NAMES UTF8");
 	$all=mysqli_query($db,"SELECT * FROM `01` ORDER BY `01`.`con` DESC, `01`.`time` DESC, `01`.`id` ASC");
@@ -207,32 +207,6 @@ $(function(){
 		//禁止右鍵
 		$("body").contextmenu(function(x){
 			x.preventDefault();
-		})
-		//上下左右移動(鍵盤)
-		$("body").keydown(function(x,y){
-			if (start=="true"&&stop=="false"){
-				if (x.key=="a"||x.key=="A"){
-					if (tmp>0){
-						$player.css("left",(parseFloat($player.css("left")))-leftspeed*2)
-					}
-				}
-				else if(x.key=="s"||x.key=="S"){
-					if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
-						$player.css("top",(parseFloat($player.css("top")))+downspeed*2)
-					}
-				}
-				else if(x.key=="d"||x.key=="D"){
-					if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
-						$player.css("left",(parseFloat($player.css("left")))+rightspeed*2)
-					}
-				}
-				else if(x.key=="w"||x.key=="W"){
-					if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
-						$player.css("top",(parseFloat($player.css("top")))-upspeed*2)
-					}
-				}
-
-			}
 		})
 		//空白建發射子彈
 		$("body").keyup(function(x,y){
@@ -619,7 +593,6 @@ $(function(){
 			//判斷子彈位置(被敵人打)
 			$stage.find(".enemygun").each(function(){
 				//玩家碰到敵人子彈
-				
 				if (parseFloat($player.css("top"))+parseFloat($player.css("height"))>parseFloat($(this).css("top"))//上
 					&&parseFloat($player.css("top"))<parseFloat($(this).css("top"))+parseFloat($(this).css("height"))//下
 					&&parseFloat($player.css("left"))+parseFloat($player.css("width"))>parseFloat($(this).css("left"))//左
@@ -697,6 +670,42 @@ $(function(){
 					})
 				}
 			}
+			//移動隕石
+			$stage.find(".back1").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back1speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back2").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back2speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back3").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back3speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back4").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back4speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
+			$stage.find(".back5").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-back5speed)
+				//刪除隕石
+				if ((parseInt($(this).css("left"))<-320)){
+					$(this).remove();
+				}
+			})
 			//子彈前進
 			$stage.find(".mygun").each(function(){
 				$(this).css("left",parseFloat($(this).css("left"))+gunspped)
@@ -715,6 +724,14 @@ $(function(){
 					left:parseFloat($stage.css("width")),
 				})
 			}
+			//移動AI
+			$stage.find(".allenemy").each(function(){
+				$(this).css("left",parseFloat($(this).css("left"))-enemyspeed)
+				//刪除AI
+				if ((parseInt($(this).css("left"))<-60)){
+					$(this).remove();
+				}
+			})
 			//敵人發射子彈
 			$stage.find(".allenemy").each(function(){
 				if (rand(0,shootgunp)==0){
@@ -725,7 +742,6 @@ $(function(){
 						left:parseFloat($(this).css("left")),
 					})
 				}
-				
 			})
 			//敵人子彈移動
 			$stage.find(".enemygun").each(function(){

@@ -106,6 +106,56 @@ div{
 	top: 10px;
 	background:repeating-linear-gradient(red,blue);
 }
+.back1{
+	position: absolute;
+	width: 230px;
+	height: 220px;
+	background: url(image/back1.png);
+	animation-name: back1;
+	animation-duration: 5s;
+	animation-timing-function: linear;
+}
+.back2{
+	position: absolute;
+	width: 320px;
+	height: 318px;
+	background: url(image/back2.png);
+	animation-name: back2;
+	animation-duration: 4s;
+	animation-timing-function: linear;
+}
+.back3{
+	position: absolute;
+	width: 68px;
+	height: 66px;
+	background: url(image/back3.png);
+	animation-name: back3;
+	animation-duration: 6s;
+	animation-timing-function: linear;
+}
+.back4{
+	position: absolute;
+	width: 48px;
+	height: 44px;
+	background: url(image/back4.png);
+	animation-name: back4;
+	animation-duration: 7s;
+	animation-timing-function: linear;
+}
+.back5{
+	position: absolute;
+	width: 180px;
+	height: 180px;
+	background: url(image/back5.png);
+	animation-name: back5;
+	animation-duration: 5.5s;
+	animation-timing-function: linear;
+}
+.allenemy{
+	animation-name: enemy;
+	animation-duration: 12s;
+	animation-timing-function: linear;
+}
 .stop{
 	position: absolute;
 	width: 960px;
