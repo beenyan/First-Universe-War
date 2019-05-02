@@ -12,11 +12,11 @@ div{
 	overflow: hidden;
 }
 .player{
-	background:url("image/fly.png");
-	width: 50px;
-	height: 30px;
+	background:url("player/player.png");
+	width: 44px;
+	height: 21px;
 	position: absolute;
-	z-index: 10;
+	z-index: 500;
 }
 .move{
 	width: 40px;
@@ -54,36 +54,9 @@ div{
 	position: absolute;
 	width: 20px;
 	height: 10px;
-}
-.back1{
-	position: absolute;
-	width: 230px;
-	height: 220px;
-	background: url(image/back1.png);
-}
-.back2{
-	position: absolute;
-	width: 320px;
-	height: 318px;
-	background: url(image/back2.png);
-}
-.back3{
-	position: absolute;
-	width: 68px;
-	height: 66px;
-	background: url(image/back3.png);
-}
-.back4{
-	position: absolute;
-	width: 48px;
-	height: 44px;
-	background: url(image/back4.png);
-}
-.back5{
-	position: absolute;
-	width: 180px;
-	height: 180px;
-	background: url(image/back5.png);
+	animation-name: mygun;
+	animation-duration: 8s;
+	animation-timing-function: linear;
 }
 .back{
 	font-size:0px;
@@ -116,17 +89,28 @@ div{
 .misstext{
 	font-size: 0px;
 }
-.gascon{
-	width: 44px;
-	height: 61px;
+.gas{
 	position: absolute;
-	background: url("image/gas.png");
+	width: 150px;
+	height: 32px;
+	left: 660px;
+	z-index: 10;
+	top: 10px;
+}
+.gas{
+	position: absolute;
+	width: 150px;
+	height: 32px;
+	left: 660px;
+	z-index: 10;
+	top: 10px;
+	background:repeating-linear-gradient(red,blue);
 }
 .stop{
 	position: absolute;
 	width: 960px;
 	height: 600px;
-	background: url("image/stop.png");
+	background: url("image/allstop.png");
 	user-select: none;
 	z-index: 20;
 	text-align: center;
@@ -138,11 +122,10 @@ div{
 	position: absolute;
 	width: 960px;
 	height: 600px;
-	background: url("image/stop.png");
 	user-select: none;
 	z-index: 20;
 	text-align: center;
-	color: red;
+	color: blue;
 }
 .allenemy{
 	z-index: 5;
@@ -197,13 +180,15 @@ div{
 	width: 960px;
 	height: 600px;
 	text-align: center;
-	background: url("image/stop.png");
 }
 .button{
+	position: absolute;
 	width: 200px;
 	height: 80px;
 	font-size: 80px;
 	margin-top: 260px;
+	line-height: 4px;
+	left:380px;
 }
 .stopstrat{
 	z-index: 21;
@@ -213,27 +198,6 @@ div{
 	height: 64px;
 	left: 800px;
 	top: 536px;
-}
-@keyframes bm{
-	0%  {left:0px;}
-	100%   {left:-7680px;}
-}
-.bg{
-	background:url("image/stage.jpg");
-	width:8640px;	
-	height:600px;
-	position:absolute;
-	animation-name: bm;
-	animation-duration: 8000000s;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
-}
-#e0{
-	font-size: 60px;
-	position: absolute;
-	left: 180px;
-	width: 600px;
-	top: 80px;
 }
 .clack{
 	background: url("image/clock.png");
@@ -247,12 +211,27 @@ div{
 	color: palevioletred;
 	z-index: 20;
 }
+#e0{
+	font-size: 60px;
+	position: absolute;
+	left: 180px;
+	width: 600px;
+	top: 80px;
+	background: linear-gradient(#018700,#00FF15);
+	color: red;
+	border-radius: 60px;
+}
 #e1{
 	font-size: 40px;
 	position: absolute;
 	left: 180px;
 	width: 600px;
 	top: 80px;
+	background: linear-gradient(#009700,#00FF15);
+	color: red;
+	border-radius: 30px;
+	border-style: double;
+	
 }
 .menu{
 	font-size: 20px;
@@ -324,12 +303,51 @@ div{
 	z-index: 11;
 	background: url("gas/gasline.png");
 }
-.gas{
+.t0{
+	border-radius: 30px;
+	height: 60px;
+	width: 400px;
+	font-size: 50px;
+	background: radial-gradient(green,yellow);
+	color: brown;
+	border-color: black;
+	text-align: center;
+}
+.allbutton{
 	position: absolute;
-	width: 150px;
-	height: 32px;
-	left: 660px;
-	z-index: 10;
-	top: 10px;
-	background:repeating-linear-gradient(red,blue)
+	border-radius: 70px;
+	color: red;
+	border-color: black;
+	box-shadow:4px 5px 10px 2px rgba(100,100,100,100);
+	background: radial-gradient(green,yellow);
+	
+}
+#b0{
+	position: absolute;
+	border-radius: 70px;
+	color: gold;
+	border-color: black;
+	box-shadow:4px 5px 10px 2px rgba(100,100,100,100);
+	left: 250px;
+	height: 40px;
+	width: 100px;
+	font-size: 20px;
+}
+#finish{
+	position: absolute;
+	border-radius: 70px;
+	color:darkred;
+	border-color: black;
+	box-shadow:4px 5px 10px 2px rgba(100,100,100,100);
+	left: 250px;
+	height: 40px;
+	font-size: 20px;
+	top: 340px;
+	background: radial-gradient(green,yellow);
+}
+.fire{
+	background: url("player/fire0.png");
+	width: 44px;
+	height: 21px;
+	position: relative;
 }

@@ -1,0 +1,103 @@
+@charset "utf-8";
+.bg{
+	background:url("image/stage.jpg");
+	width:8640px;	
+	height:600px;
+	position:absolute;
+	animation-name: bm;
+	animation-duration: 40s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+	animation-play-state: paused;
+}
+@keyframes bm{
+	0%  {left:0px;}
+	100%   {left:-7680px;}
+}
+.gascon{
+	width: 44px;
+	height: 61px;
+	position: absolute;
+	background: url("image/gas.png");
+	animation-name: gas;
+	animation-duration: 9s;
+	animation-timing-function: linear;
+}
+@keyframes gas{
+	0% {top: -61px;}
+	100% {top: 800px;}
+}
+.back1{
+	position: absolute;
+	width: 230px;
+	height: 220px;
+	background: url(image/back1.png);
+	animation-name: back1;
+	animation-duration: 5s;
+	animation-timing-function: linear;
+}
+@keyframes back1{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
+.back2{
+	position: absolute;
+	width: 320px;
+	height: 318px;
+	background: url(image/back2.png);
+	animation-name: back2;
+	animation-duration: 4s;
+	animation-timing-function: linear;
+}
+@keyframes back2{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
+.back3{
+	position: absolute;
+	width: 68px;
+	height: 66px;
+	background: url(image/back3.png);
+	animation-name: back3;
+	animation-duration: 6s;
+	animation-timing-function: linear;
+}
+@keyframes back3{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
+.back4{
+	position: absolute;
+	width: 48px;
+	height: 44px;
+	background: url(image/back4.png);
+	animation-name: back4;
+	animation-duration: 7s;
+	animation-timing-function: linear;
+}
+@keyframes back4{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
+.back5{
+	position: absolute;
+	width: 180px;
+	height: 180px;
+	background: url(image/back5.png);
+	animation-name: back5;
+	animation-duration: 5.5s;
+	animation-timing-function: linear;
+}
+@keyframes back5{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
+.allenemy{
+	animation-name: enemy;
+	animation-duration: 12s;
+	animation-timing-function: linear;
+}
+@keyframes enemy{
+	0%{left: 960px;}
+	100%{left: -400px;}
+}
