@@ -137,6 +137,7 @@ $(function(){
 			clearInterval(timeup)
 			timeup=setInterval(function(){
 				if (stop=="false"){
+					$(".up").css("background-image","url(move/up_1.png)")
 					tmp=(parseFloat($player.css("top")))-upspeed
 					if (tmp+parseFloat($player.css("height"))/2>parseFloat($stage.css("top"))){
 						$player.css("top",tmp)
@@ -145,9 +146,11 @@ $(function(){
 			},1000/FPS)
 		})
 		$(".up").mouseup(function(){
+			$(this).css("background-image","url(move/up_0.png)")
 			clearInterval(timeup)
 		})
 		$(".up").mouseout(function(){
+			$(this).css("background-image","url(move/up_0.png)")
 			clearInterval(timeup)
 		})
 		//向下
@@ -155,6 +158,7 @@ $(function(){
 			clearInterval(timedown)
 			timedown=setInterval(function(){
 				if (stop=="false"){
+					$(".down").css("background-image","url(move/down_1.png)")
 					tmp=(parseFloat($player.css("top")))+downspeed
 					if (tmp+parseFloat($player.css("height"))/2<parseFloat($stage.css("height"))){
 						$player.css("top",tmp)
@@ -163,9 +167,11 @@ $(function(){
 			},1000/FPS)
 		})
 		$(".down").mouseup(function(){
+			$(this).css("background-image","url(move/down_0.png)")
 			clearInterval(timedown)
 		})
 		$(".down").mouseout(function(){
+			$(this).css("background-image","url(move/down_0.png)")
 			clearInterval(timedown)
 		})
 		//向右
@@ -173,6 +179,7 @@ $(function(){
 			clearInterval(timeright)
 			timeright=setInterval(function(){
 				if (stop=="false"){
+					$(".right").css("background-image","url(move/right_1.png)")
 					tmp=(parseFloat($player.css("left")))+rightspeed
 					if (tmp+parseFloat($player.css("width"))<parseFloat($stage.css("width"))){
 						$player.css("left",tmp)
@@ -181,9 +188,11 @@ $(function(){
 			},1000/FPS)
 		})
 		$(".right").mouseup(function(){
+			$(this).css("background-image","url(move/right_0.png)")
 			clearInterval(timeright)
 		})
 		$(".right").mouseout(function(){
+			$(this).css("background-image","url(move/right_0.png)")
 			clearInterval(timeright)
 		})
 		//向左
@@ -191,6 +200,7 @@ $(function(){
 			clearInterval(timeleft)
 			timeleft=setInterval(function(){
 				if (stop=="false"){
+					$(".left").css("background-image","url(move/left_1.png)")
 					tmp=(parseFloat($player.css("left")))-leftspeed
 					if (tmp>0){
 						$player.css("left",tmp)
@@ -199,14 +209,30 @@ $(function(){
 			},1000/FPS)
 		})
 		$(".left").mouseup(function(){
+			$(this).css("background-image","url(move/left_0.png)")
 			clearInterval(timeleft)
 		})
 		$(".left").mouseout(function(){
+			$(this).css("background-image","url(move/left_0.png)")
 			clearInterval(timeleft)
 		})
 		//禁止右鍵
 		$("body").contextmenu(function(x){
 			x.preventDefault();
+		})
+		//中鍵攻擊
+		$(".midden").mousedown(function(){
+			if (stop=="false"){
+				$stage.append("<div class='mygun'></div>")
+				$find=$stage.find(".mygun:last");
+				$find.css({
+					left:parseFloat($player.css("left"))+35,
+					top:parseFloat($player.css("top"))+parseInt($player.css("height"))/4,
+				})
+				if (music=="true"){
+					myshootSound.play();
+				}
+			}
 		})
 		//空白建發射子彈
 		$("body").keyup(function(x,y){
@@ -408,14 +434,25 @@ $(function(){
 				frames = 0;
 		}}, 1000);
 		//遊戲按鈕
-		$(".button").click(function(){
-			starttime()
-			$(".start").remove();
+		$("#water").click(function(){
+			var tttt=setInterval(function(){
+				console.log(123)
+				starttime();
+				$("#water").remove();
+				$(".allbutton").remove();
+				clearInterval(tttt);
+			},500)
 		})
 		$(".allbutton").mousemove(function(){
 			$(this).css("background","#f19e0d")
 		})
 		$(".allbutton").mouseout(function(){
+			$(this).css("background","radial-gradient(green,yellow)")
+		})
+		$("#water").mousemove(function(){
+			$(this).css("background","#f19e0d")
+		})
+		$("#water").mouseout(function(){
 			$(this).css("background","radial-gradient(green,yellow)")
 		})
 		//永遠執行(FPS)
@@ -461,21 +498,6 @@ $(function(){
 				music="true";
 				mybackSound.play();
 			}
-		})
-		//字體大小
-		$(".leftfont").click(function(){
-			$("*:not(.back)").each(function(){
-				$(this).css({
-					"font-size":parseInt($(this).css("font-size"))-1
-				})
-			})
-		})
-		$(".rightfont").click(function(){
-			$("*:not(.back)").each(function(){
-				$(this).css({
-					"font-size":parseInt($(this).css("font-size"))+1
-				})
-			})
 		})
 		//統整60FPS計時器
 		function alltime(){
@@ -770,6 +792,31 @@ $(function(){
 				//console.log("隕石"+sumbackp,"敵人"+sumenemyp,"子彈"+shootgunp,"燃料"+sump)
 			}
 		}
+		//特效
+		$(".rightfont").mousedown(function(){
+			if (parseInt($("#showtime").css("font-size"))<30){
+				$("#showtime").css("font-size",parseInt($("#showtime").css("font-size"))+1)
+				$(".icon").css("font-size",parseInt($(".icon").css("font-size"))+1)
+			}
+			$(this).css("top",563)
+		})
+		$(".rightfont").mouseup(function(){
+			$(this).css("top",543)
+		})
+		$(".rightfont").mouseleave(function(){
+			$(this).css("top",543)
+		})
+		$(".leftfont").mousedown(function(){
+			$("#showtime").css("font-size",parseInt($("#showtime").css("font-size"))-1)
+			$(".icon").css("font-size",parseInt($(".icon").css("font-size"))-1)
+			$(this).css("top",563)
+		})
+		$(".leftfont").mouseup(function(){
+			$(this).css("top",543)
+		})
+		$(".leftfont").mouseleave(function(){
+			$(this).css("top",543)
+		})
 	})
 </script>
 <link type="text/css" href="allcss.css" rel="stylesheet">
@@ -791,7 +838,6 @@ $(function(){
 		<div class='gastext'>燃料</div>
 		<div class="FPS">FPS:60</div>
 		<div class="start" id="biggen">
-			<input type="button" value="start" class="button allbutton"> 
 			<input id="study" type="button" value="遊戲教學" style="width: 64px;height: 64px; top: 270px;left: 620px" class=" allbutton">
 		</div>
 		<div class="stopstrat"></div>
@@ -803,6 +849,7 @@ $(function(){
 		<div id="gasback"></div>
 		<div id="gasline"></div>
 		<div class="gas" id="gas"></div>
+		<a id="water">Start</a>
 	</div>
 </body>
 </html>

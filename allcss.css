@@ -10,6 +10,7 @@ div{
 	top:0; left:0; right:0; bottom:0;
 	margin:auto;
 	overflow: hidden;
+	cursor: wait;
 }
 .player{
 	background:url("player/player.png");
@@ -23,24 +24,25 @@ div{
 	height: 40px;
 	position: absolute;
 	z-index: 11;
+	cursor:cell;
 }
 .up{
-	background:url("image/up.png");
+	background:url("move/up_0.png");
 	left: 40px;
 	top: 480px;
 }
 .down{
-	background:url("image/down.png");
+	background:url("move/down_0.png");
 	left: 40px;
 	top: 560px;
 }
 .left{
-	background:url("image/left.png");
+	background:url("move/left_0.png");
 	left: 0px;
 	top: 520px;
 }
 .right{
-	background:url("image/right.png");
+	background:url("move/right_0.png");
 	left: 80px;
 	top: 520px;
 }
@@ -248,6 +250,7 @@ div{
 	height: 64px;
 	left: 800px;
 	top: 536px;
+	cursor:pointer;
 }
 .clack{
 	background: url("image/clock.png");
@@ -299,7 +302,7 @@ div{
 	height: 20px;
 	z-index: 20;
 	user-select: none;
-	left: 300px;
+	left: 280px;
 }
 .musiccon{
 	position: absolute;
@@ -308,6 +311,7 @@ div{
 	height: 64px;
 	top: 5px;
 	left: 240px;
+	cursor:pointer;
 }
 .leftfont{
 	position: absolute;
@@ -321,6 +325,7 @@ div{
 	color:gold;
 	line-height: 80px;
 	text-align: right;
+	cursor:pointer;
 }
 .rightfont{
 	position: absolute;
@@ -334,6 +339,7 @@ div{
 	color:gold;
 	line-height: 80px;
 	text-align: left;
+	cursor: pointer;
 }
 #gasback{
 	position: absolute;
@@ -370,7 +376,7 @@ div{
 	border-color: black;
 	box-shadow:4px 5px 10px 2px rgba(100,100,100,100);
 	background: radial-gradient(green,yellow);
-	
+    cursor:pointer;
 }
 #b0{
 	position: absolute;
@@ -394,10 +400,69 @@ div{
 	font-size: 20px;
 	top: 340px;
 	background: radial-gradient(green,yellow);
+	cursor: pointer;
 }
 .fire{
 	background: url("player/fire0.png");
 	width: 44px;
 	height: 21px;
 	position: relative;
+}
+/*水波紋*/
+#water{
+	position: absolute;
+	top:43.5%;
+	left:40%;
+	width:190px;
+	height:70px;
+	background: radial-gradient(green,yellow);
+	border:inset;
+	border-width: 5px;
+	border-color: black;
+	border-radius: 40px;
+	text-align:center;
+	line-height:70px;
+	color: red;
+	font-size:80px;
+    cursor:pointer;
+	user-select:none;
+	overflow: hidden;
+}
+#water:after{
+	content:"";
+	position: absolute;
+	left: -50px;
+	top: -100px;
+	width: 300px;
+	height: 300px;
+	background: linear-gradient(#00FFFF,blue);
+	border-radius: 50%;
+	opacity:0;
+	transition:1s;
+}
+#water:active:after{
+	width:0px;
+	height:0px;
+	left:95px;
+	top: 32px;
+	opacity: 1;
+	transition-duration: 0s;
+}
+#back{
+	position: absolute;
+	width:200px;
+	height:80px;
+	background: radial-gradient(green,yellow);
+	border:inset;
+	border-width: 5px;
+	border-color: black;
+	border-radius: 40px;
+	text-align:center;
+	line-height:60px;
+	color: red;
+	font-size:70px;
+    cursor:pointer;
+	user-select:none;
+	top: 260px;
+	left: 383px;
 }
