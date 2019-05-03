@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>外太空射擊遊戲</title>
+<link rel="icon" href="image/back2.png" type="image/x-icon" />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
@@ -224,7 +225,14 @@ $(function(){
 				if (music=="true"){
 					myshootSound.play();
 				}
+				$(".midden").css("background-image","url(image/midden_1.png)")
 			}
+		})
+		$(".midden").mouseleave(function(){
+			$(".midden").css("background-image","url(image/midden_0.png)")
+		})
+		$(".midden").mouseup(function(){
+			$(".midden").css("background-image","url(image/midden_0.png)")
 		})
 		//空白建發射子彈
 		$("body").keyup(function(x,y){
