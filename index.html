@@ -19,17 +19,17 @@
 			mybackSound = soundManager.createSound({
 				url: 'music/backmusic.mp3',
 				volume:20,
-			});
+			})
 			myshootSound = soundManager.createSound({
 				url: 'music/shootmusic.wav',
 				volume:15,
-			});
+			})
 			boommusic = soundManager.createSound({
 				url: 'music/boommusic.wav',
 				volume:15,
-			});
+			})
 		}
-	});
+	})
 </script>
 <script>
 $(function(){
@@ -788,7 +788,6 @@ $(function(){
 				if (sump>100){
 					sump=sump-rand(0,3);				//燃料生成機率
 				}
-				//console.log("隕石"+sumbackp,"敵人"+sumenemyp,"子彈"+shootgunp,"燃料"+sump)
 			}
 		}
 		//特效
@@ -842,8 +841,8 @@ $(function(){
 		<div class="stopstrat"></div>
 		<div class="clack" id="showtime" style="user-select:none">0:0</div>
 		<div class="musiccon"></div>
-		<div class="leftfont">- &nbsp;&nbsp;字</div>
-		<div class="rightfont">體 &nbsp;&nbsp;+</div>
+		<div class='leftfont'>- &nbsp;&nbsp;字</div>
+		<div class='rightfont'>體 &nbsp;&nbsp;+</div>
 		<!--燃料-->
 		<div id="gasback"></div>
 		<div id="gasline"></div>
