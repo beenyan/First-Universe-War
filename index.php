@@ -1,9 +1,4 @@
-﻿<?php
-	$db=mysqli_connect("localhost","root","","shootgame");
-	mysqli_query($db,"SET NAMES UTF8");
-	$all=mysqli_query($db,"SELECT * FROM `01` ORDER BY `01`.`con` DESC, `01`.`time` DESC, `01`.`id` ASC");
-?>
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -46,8 +41,6 @@ $(function(){
 		var timeright;
 		var timeleft
 		var $find;
-		var enemygunspeed=3;//敵人子彈速度
-		var gunspped=8; 	//子彈速度
 		var sumbackp=300; 	//生成隕石機率sumbackp分之1
 		var score=10; 		//擊破隕石得分數
 		var FPS=60;
@@ -55,11 +48,10 @@ $(function(){
 		var backattack=300;	//敵人攻擊
 		var sump=400;		//燃料生成機率sump/1s
 		var stop="true";	//檢查遊戲是否暫停
-		var enemyspeed=2; 	//敵人戰艦移動速度
 		var sumenemyp=500;	//生成敵人機率sumenemyp/(1000/FPS)s
 		var shootgunp=500;	//敵人射擊機率
 		var addtime=0;		//每5秒增強敵人
-		var mycon;			//分數
+		var mycon=0;			//分數
 		var flyalltime=0;	//飛行時間
 		//成績
 		var line0;
@@ -307,7 +299,6 @@ $(function(){
 		//遊戲結束
 		function gameover(){
 			$player.remove();
-			mycon=parseInt($(".icon").text());
 			offtime();
 			$stage.append("<div class='gameover' id='gameover'><table id='e0' style='background: radial-gradient(gold,red)'><tbody><tr><td style='color:blue'>Input Your Name</td></tr><tr><td><hr><form id='ff'><br><input maxlength='14' type='text' name='name' id='name' class='t0'><input type='text' id='con' name='con' value="+mycon+" style=\"display:none\"><input type='text' id='time' name='time' value="+flyalltime+" style=\"display:none\"><br><br><input type='button' value='檢視分數' disabled='disabled' id='b0'><br><br></form></td></tr></tbody</table></div>");
 			//(開始新遊戲)
@@ -365,6 +356,7 @@ $(function(){
 					$(".allenemy").remove();
 					$(".enemygun").remove();
 					//變數重設
+					mycon=0;
 					flyalltime=0;
 					shootgunp=500;
 					sumenemyp=500;
@@ -517,7 +509,8 @@ $(function(){
 						}
 						else{
 							//加分
-							$(".icon").html(parseInt($(".icon").text())+score+"得分");
+							mycon=mycon+10;
+							$(".icon").html(mycon+"得分");
 							//消除隕石子彈
 							$(this).remove();
 							tt.remove();
@@ -582,7 +575,8 @@ $(function(){
 					&&parseFloat($(this).css("left"))+parseFloat($(this).css("width"))/2<parseFloat(tt.css("left"))+parseFloat(tt.css("width")))//右
 					{
 						//加分
-						$(".icon").html(parseInt($(".icon").text())+5+"得分");
+						mycon=mycon+5;
+						$(".icon").html(mycon+"得分");
 						//消除敵人&子彈
 						$(this).remove();
 						tt.remove();
@@ -730,7 +724,7 @@ $(function(){
 			})
 			//子彈前進
 			$stage.find(".mygun").each(function(){
-				$(this).css("left",parseFloat($(this).css("left"))+gunspped)
+				$(this).css("left",parseFloat($(this).css("left"))+8)
 				//刪除子彈(超出螢幕)
 				if (parseFloat($(this).css("left"))>parseFloat($stage.css("width"))){
 					$(this).remove();
@@ -748,7 +742,7 @@ $(function(){
 			}
 			//移動AI
 			$stage.find(".allenemy").each(function(){
-				$(this).css("left",parseFloat($(this).css("left"))-enemyspeed)
+				$(this).css("left",parseFloat($(this).css("left"))-2)
 				//刪除AI
 				if ((parseInt($(this).css("left"))<-60)){
 					$(this).remove();
@@ -767,7 +761,7 @@ $(function(){
 			})
 			//敵人子彈移動
 			$stage.find(".enemygun").each(function(){
-				$(this).css("left",parseFloat($(this).css("left"))-enemygunspeed)
+				$(this).css("left",parseFloat($(this).css("left"))-3)
 					//刪除子彈(超出螢幕)
 					if (parseFloat($(this).css("left"))<0){
 						$(this).remove();
