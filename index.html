@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>外太空射擊遊戲</title>
-<link rel="icon" href="image/back2.png" type="image/x-icon" />
+<link rel="icon" href="image/back2.png">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
@@ -17,21 +17,18 @@
 	soundManager.setup({
 		onready: function() {
 			mybackSound = soundManager.createSound({
-				id: 'aSound',
 				url: 'music/backmusic.mp3',
 				volume:20,
 			});
 			myshootSound = soundManager.createSound({
-				id: 'bSound',
 				url: 'music/shootmusic.wav',
 				volume:15,
 			});
 			boommusic = soundManager.createSound({
-				id: 'cSound',
 				url: 'music/boommusic.wav',
 				volume:15,
 			});
-		},
+		}
 	});
 </script>
 <script>
