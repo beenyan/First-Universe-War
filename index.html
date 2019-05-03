@@ -374,7 +374,7 @@ $(function(){
 					stop="false";	//檢查遊戲是否暫停
 					start="true";
 					$("#showtime").html(0+":"+0);
-					$(".icon").html("0得分");
+					$(".icon").html("分數0");
 					//位置重刷
 					$stage.append("<div class='player' id='player'><div class='fire'></div></div>")
 					$player=$(".player")
@@ -515,7 +515,7 @@ $(function(){
 						else{
 							//加分
 							mycon=mycon+10;
-							$(".icon").html(mycon+"得分");
+							$(".icon").html("分數"+mycon);
 							//消除隕石子彈
 							$(this).remove();
 							tt.remove();
@@ -581,7 +581,7 @@ $(function(){
 					{
 						//加分
 						mycon=mycon+5;
-						$(".icon").html(mycon+"得分");
+						$(".icon").html("分數"+mycon);
 						//消除敵人&子彈
 						$(this).remove();
 						tt.remove();
@@ -832,7 +832,7 @@ $(function(){
 		<div class="move left"></div>
 		<div class="move right"></div>
 		<div class="move midden"></div>
-		<div class="icon">0得分</div>
+		<div class="icon">分數0</div>
 		<div class='gastext'>燃料</div>
 		<div class="FPS">FPS:60</div>
 		<div class="start" id="biggen">
